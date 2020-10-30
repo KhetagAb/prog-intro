@@ -12,11 +12,11 @@ public abstract class AbstractList implements ListAble {
         this.elements = elements;
     }
 
-    protected void toBBCode(StringBuilder sb, String openBorder, String closeBorder) {
-        sb.append(openBorder);
+    protected void toBBCode(StringBuilder sb, String tag) {
+        sb.append('[').append(tag).append(']');
         for (ListItem e: elements) {
-            ((BBCodeAble) e).toBBCode(sb);
+            e.toBBCode(sb);
         }
-        sb.append(closeBorder);
+        sb.append("[/list]");
     }
 }
