@@ -1,4 +1,4 @@
-package markup.list;
+package markup;
 
 import java.util.List;
 

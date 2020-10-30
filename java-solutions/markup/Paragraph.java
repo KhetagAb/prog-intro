@@ -2,7 +2,6 @@ package markup;
 
 import markup.interfeces.ListAble;
 import markup.interfeces.ParagraphAble;
-import markup.marks.AbstractMark;
 
 import java.util.List;
 

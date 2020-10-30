@@ -1,21 +1,21 @@
-package markup.marks;
+package markup;
 
 import markup.interfeces.ParagraphAble;
 
 import java.util.List;
 
-public class Strong extends AbstractMark {
-    public Strong(List<ParagraphAble> elements) {
+public class Strikeout extends AbstractMark {
+    public Strikeout(List<ParagraphAble> elements) {
         super(elements);
     }
 
     @Override
     public void toMarkdown(StringBuilder sb) {
-        super.toMarkdown(sb, "__", "__");
+        super.toMarkdown(sb, "~", "~");
     }
 
     @Override
     public void toBBCode(StringBuilder sb) {
-        super.toBBCode(sb, "[b]", "[/b]");
+        super.toBBCode(sb, "[s]", "[/s]");
     }
 }

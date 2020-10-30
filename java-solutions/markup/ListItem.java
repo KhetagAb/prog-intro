@@ -1,4 +1,4 @@
-package markup.list;
+package markup;
 
 import markup.interfeces.BBCodeAble;
 import markup.interfeces.ListAble;

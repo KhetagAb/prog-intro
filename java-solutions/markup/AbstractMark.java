@@ -1,4 +1,4 @@
-package markup.marks;
+package markup;
 
 import markup.interfeces.ParagraphAble;
 
