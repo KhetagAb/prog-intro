@@ -1,8 +1,6 @@
-package markup.Marks;
+package markup.marks;
 
-import markup.Interfeces.BBCodeAble;
-import markup.Interfeces.MarkdownAble;
-import markup.Interfeces.ParagraphAble;
+import markup.interfeces.ParagraphAble;
 
 import java.util.List;
 

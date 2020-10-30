@@ -41,7 +41,7 @@ public class WordStatCountFirstIndex {
                 for (Map.Entry<String, WordsEnters> ent: array) {
                     WordsEnters temp = ent.getValue();
 
-                    writer.write(String.format("%s %d %s%n", ent.getKey(), temp.countOfWords, temp.getEntries().toString(), System.lineSeparator()));
+                    writer.write(String.format("%s %d %s%n", ent.getKey(), temp.countOfWords, temp.getEntries().toString()));
                 }
             } finally {
                 writer.close();

@@ -1,7 +1,8 @@
-package markup.Lists;
+package markup.list;
 
-import markup.Interfeces.BBCodeAble;
-import markup.Interfeces.ListAble;
+import markup.interfeces.BBCodeAble;
+import markup.interfeces.ListAble;
+
 import java.util.List;
 
 public class ListItem implements BBCodeAble {

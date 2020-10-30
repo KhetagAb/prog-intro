@@ -1,10 +1,6 @@
 package markup;
 
-import markup.Interfeces.BBCodeAble;
-import markup.Interfeces.MarkdownAble;
-import markup.Interfeces.ParagraphAble;
-
-import java.util.List;
+import markup.interfeces.ParagraphAble;
 
 public class Text implements ParagraphAble {
     final String text;

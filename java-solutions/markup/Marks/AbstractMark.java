@@ -1,6 +1,6 @@
-package markup.Marks;
+package markup.marks;
 
-import markup.Interfeces.*;
+import markup.interfeces.ParagraphAble;
 
 import java.util.List;
 

@@ -3,9 +3,7 @@ import java.util.PrimitiveIterator;
 
 public class IntList {
     public int size = 0;
-
-    private int capacity = 1;
-    private int[] array = new int[] {-1};
+    private int[] array = new int[1];
 
     public int get(int i) {
         return array[i];
@@ -16,9 +14,8 @@ public class IntList {
     }
 
     public void pushBack(int value) {
-        if (capacity == size) {
-            capacity *= 2;
-            array = Arrays.copyOf(array, capacity);
+        if (array.length == size) {
+            array = Arrays.copyOf(array, array.length * 2);
         }
 
         array[size++] = value;
