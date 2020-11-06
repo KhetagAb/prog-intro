@@ -7,7 +7,7 @@ import markup.interfeces.ParagraphAble;
 
 import java.util.List;
 
-public class Paragraph extends AbstractElement implements MarkdownAble, BBCodeAble {
+public class Paragraph extends AbstractElement implements ListAble, MarkdownAble, BBCodeAble {
     public Paragraph(List<ParagraphAble> elements) {
         super(elements);
     }
