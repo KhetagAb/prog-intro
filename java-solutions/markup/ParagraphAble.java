@@ -1,3 +1,3 @@
-package markup.interfeces;
+package markup;
 
 public interface ParagraphAble extends BBCodeAble, MarkdownAble { }

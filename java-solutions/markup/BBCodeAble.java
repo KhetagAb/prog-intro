@@ -1,4 +1,4 @@
-package markup.interfeces;
+package markup;
 
 public interface BBCodeAble {
     void toBBCode(StringBuilder sb);

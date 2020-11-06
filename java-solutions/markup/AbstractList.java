@@ -1,8 +1,5 @@
 package markup;
 
-import markup.interfeces.BBCodeAble;
-import markup.interfeces.ListAble;
-
 import java.util.List;
 
 public abstract class AbstractList implements ListAble {

@@ -1,7 +1,5 @@
 package markup;
 
-import markup.interfeces.ParagraphAble;
-
 import java.util.List;
 
 public abstract class AbstractElement {
@@ -11,19 +9,22 @@ public abstract class AbstractElement {
         this.elements = elements;
     }
 
-    protected void toMarkdown(StringBuilder sb, String tag) {
-        sb.append(tag);
+    protected abstract String getBBTag();
+    protected abstract String getMarkdownTag();
+
+    protected void toMarkdown(StringBuilder sb) {
+        sb.append(getMarkdownTag());
         for (ParagraphAble e: elements) {
             e.toMarkdown(sb);
         }
-        sb.append(tag);
+        sb.append(getMarkdownTag());
     }
 
-    protected void toBBCode(StringBuilder sb, String tag) {
-        sb.append('[').append(tag).append(']');
+    protected void toBBCode(StringBuilder sb) {
+        sb.append('[').append(getBBTag()).append(']');
         for (ParagraphAble e: elements) {
             e.toBBCode(sb);
         }
-        sb.append("[/").append(tag).append(']');
+        sb.append("[/").append(getBBTag()).append(']');
     }
 }

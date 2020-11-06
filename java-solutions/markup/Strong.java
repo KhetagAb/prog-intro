@@ -1,9 +1,5 @@
 package markup;
 
-import markup.interfeces.BBCodeAble;
-import markup.interfeces.MarkdownAble;
-import markup.interfeces.ParagraphAble;
-
 import java.util.List;
 
 public class Strong extends AbstractElement implements ParagraphAble {
@@ -12,12 +8,22 @@ public class Strong extends AbstractElement implements ParagraphAble {
     }
 
     @Override
+    protected String getBBTag() {
+        return "b";
+    }
+
+    @Override
+    protected String getMarkdownTag() {
+        return "__";
+    }
+
+    @Override
     public void toMarkdown(StringBuilder sb) {
-        super.toMarkdown(sb, "__");
+        super.toMarkdown(sb);
     }
 
     @Override
     public void toBBCode(StringBuilder sb) {
-        super.toBBCode(sb, "b");
+        super.toBBCode(sb);
     }
 }

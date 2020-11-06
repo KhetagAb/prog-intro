@@ -1,15 +1,20 @@
 package markup;
 
-import markup.interfeces.BBCodeAble;
-import markup.interfeces.ListAble;
-import markup.interfeces.MarkdownAble;
-import markup.interfeces.ParagraphAble;
-
 import java.util.List;
 
 public class Paragraph extends AbstractElement implements ListAble, MarkdownAble, BBCodeAble {
     public Paragraph(List<ParagraphAble> elements) {
         super(elements);
+    }
+
+    @Override
+    protected String getBBTag() {
+        return "";
+    }
+
+    @Override
+    protected String getMarkdownTag() {
+        return "";
     }
 
     @Override

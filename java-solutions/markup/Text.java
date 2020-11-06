@@ -1,7 +1,5 @@
 package markup;
 
-import markup.interfeces.ParagraphAble;
-
 public class Text implements ParagraphAble {
     final String text;
 
