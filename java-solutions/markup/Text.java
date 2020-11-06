@@ -9,18 +9,14 @@ public class Text implements ParagraphAble {
         this.text = text;
     }
 
-    private void formatText(StringBuilder sb) {
+    @Override
+    public void toMarkdown(StringBuilder sb) {
         sb.append(text);
     }
 
     @Override
-    public void toMarkdown(StringBuilder sb) {
-        formatText(sb);
-    }
-
-    @Override
     public void toBBCode(StringBuilder sb) {
-        formatText(sb);
+        sb.append(text);
     }
 }
 

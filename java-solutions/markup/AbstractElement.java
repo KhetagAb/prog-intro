@@ -4,10 +4,10 @@ import markup.interfeces.ParagraphAble;
 
 import java.util.List;
 
-public abstract class AbstractMark implements ParagraphAble {
+public abstract class AbstractElement {
     protected final List<ParagraphAble> elements;
 
-    protected AbstractMark(List<ParagraphAble> elements) {
+    protected AbstractElement(List<ParagraphAble> elements) {
         this.elements = elements;
     }
 
