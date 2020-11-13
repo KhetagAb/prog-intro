@@ -8,12 +8,7 @@ public class UnorderedList extends AbstractList implements ListAble {
     }
 
     @Override
-    protected String getListTag() {
+    public String getBBTag() {
         return "list";
-    }
-
-    @Override
-    public void toBBCode(StringBuilder sb) {
-        super.toBBCode(sb);
     }
 }

@@ -8,22 +8,12 @@ public class Strong extends AbstractElement implements ParagraphAble {
     }
 
     @Override
-    protected String getBBTag() {
+    public String getBBTag() {
         return "b";
     }
 
     @Override
-    protected String getMarkdownTag() {
+    public String getMarkdownTag() {
         return "__";
-    }
-
-    @Override
-    public void toMarkdown(StringBuilder sb) {
-        super.toMarkdown(sb);
-    }
-
-    @Override
-    public void toBBCode(StringBuilder sb) {
-        super.toBBCode(sb);
     }
 }

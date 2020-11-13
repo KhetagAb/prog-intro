@@ -8,12 +8,7 @@ public class OrderedList extends AbstractList implements ListAble {
     }
 
     @Override
-    protected String getListTag() {
+    public String getBBTag() {
         return "list=1";
-    }
-
-    @Override
-    public void toBBCode(StringBuilder sb) {
-        super.toBBCode(sb);
     }
 }

@@ -9,10 +9,10 @@ public abstract class AbstractElement {
         this.elements = elements;
     }
 
-    protected abstract String getBBTag();
-    protected abstract String getMarkdownTag();
+    public abstract String getBBTag();
+    public abstract String getMarkdownTag();
 
-    protected void toMarkdown(StringBuilder sb) {
+    public void toMarkdown(StringBuilder sb) {
         sb.append(getMarkdownTag());
         for (ParagraphAble e: elements) {
             e.toMarkdown(sb);
@@ -20,7 +20,7 @@ public abstract class AbstractElement {
         sb.append(getMarkdownTag());
     }
 
-    protected void toBBCode(StringBuilder sb) {
+    public void toBBCode(StringBuilder sb) {
         sb.append('[').append(getBBTag()).append(']');
         for (ParagraphAble e: elements) {
             e.toBBCode(sb);

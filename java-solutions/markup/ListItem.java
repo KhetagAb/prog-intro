@@ -10,8 +10,13 @@ public class ListItem implements BBCodeAble {
     }
 
     @Override
+    public String getBBTag() {
+        return "[*]";
+    }
+
+    @Override
     public void toBBCode(StringBuilder sb) {
-        sb.append("[*]");
+        sb.append(getBBTag());
         for (ListAble e: elements) {
             e.toBBCode(sb);
         }

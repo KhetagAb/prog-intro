@@ -8,12 +8,12 @@ public class Paragraph extends AbstractElement implements ListAble, MarkdownAble
     }
 
     @Override
-    protected String getBBTag() {
+    public String getBBTag() {
         return "";
     }
 
     @Override
-    protected String getMarkdownTag() {
+    public String getMarkdownTag() {
         return "";
     }
 

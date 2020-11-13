@@ -9,10 +9,10 @@ public abstract class AbstractList {
         this.elements = elements;
     }
 
-    protected abstract String getListTag();
+    public abstract String getBBTag();
 
-    protected void toBBCode(StringBuilder sb) {
-        sb.append('[').append(getListTag()).append(']');
+    public void toBBCode(StringBuilder sb) {
+        sb.append('[').append(getBBTag()).append(']');
         for (ListItem e: elements) {
             e.toBBCode(sb);
         }

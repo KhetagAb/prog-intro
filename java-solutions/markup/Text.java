@@ -8,6 +8,16 @@ public class Text implements ParagraphAble {
     }
 
     @Override
+    public String getBBTag() {
+        return "";
+    }
+
+    @Override
+    public String getMarkdownTag() {
+        return "";
+    }
+
+    @Override
     public void toMarkdown(StringBuilder sb) {
         sb.append(text);
     }
