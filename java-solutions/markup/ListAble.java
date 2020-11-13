@@ -1,3 +1,3 @@
 package markup;
 
-public interface ListAble extends BBCodeAble { }//should not be public
+interface ListAble extends BBCodeAble { } // OK - should not be public

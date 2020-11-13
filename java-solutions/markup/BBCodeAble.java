@@ -1,6 +1,6 @@
 package markup;
 
-public interface BBCodeAble {
+interface BBCodeAble {
     void toBBCode(StringBuilder sb);
     String getBBTag();
 }

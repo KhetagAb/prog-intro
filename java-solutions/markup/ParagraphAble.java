@@ -1,3 +1,3 @@
 package markup;
 
-public interface ParagraphAble extends BBCodeAble, MarkdownAble { }
+interface ParagraphAble extends BBCodeAble, MarkdownAble { }
