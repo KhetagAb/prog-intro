@@ -20,7 +20,7 @@ public abstract class AbstractElement {
         sb.append(getMarkdownTag());
     }
 
-    public void toBBCode(StringBuilder sb) {
+    public void toBBCode(StringBuilder sb) {//copypaste BBCode
         sb.append('[').append(getBBTag()).append(']');
         for (ParagraphAble e: elements) {
             e.toBBCode(sb);
