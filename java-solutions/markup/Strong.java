@@ -8,12 +8,16 @@ public class Strong extends AbstractElement implements ParagraphAble {
     }
 
     @Override
-    public String getBBTag() {
-        return "b";
+    protected String getBBTag(boolean isOpenTag) {
+        if (isOpenTag) {
+            return "[b]";
+        } else {
+            return "[/b]";
+        }
     }
 
     @Override
-    public String getMarkdownTag() {
+    protected String getMarkdownTag() {
         return "__";
     }
 }

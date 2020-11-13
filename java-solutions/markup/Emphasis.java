@@ -8,12 +8,16 @@ public class Emphasis extends AbstractElement implements ParagraphAble {
     }
 
     @Override
-    public String getBBTag() {
-        return "i";
+    protected String getBBTag(boolean isOpenTag) {
+        if (isOpenTag) {
+            return "[i]";
+        } else {
+            return "[/i]";
+        }
     }
 
     @Override
-    public String getMarkdownTag() {
+    protected String getMarkdownTag() {
         return "*";
     }
 }

@@ -8,12 +8,16 @@ public class Strikeout extends AbstractElement implements ParagraphAble {
     }
 
     @Override
-    public String getBBTag() {
-        return "s";
+    protected String getBBTag(boolean isOpenTag) {
+        if (isOpenTag) {
+            return "[s]";
+        } else {
+            return "[/s]";
+        }
     }
 
     @Override
-    public String getMarkdownTag() {
+    protected String getMarkdownTag() {
         return "~";
     }
 }

@@ -2,13 +2,22 @@ package markup;
 
 import java.util.List;
 
-public class UnorderedList extends AbstractList implements ListAble {
+public class UnorderedList extends AbstractElement implements ListAble {
     public UnorderedList(List<ListItem> elements) {
        super(elements);
     }
 
     @Override
-    public String getBBTag() {
-        return "list";
+    protected String getBBTag(boolean isOpenTag) {
+        if (isOpenTag) {
+            return "[list]";
+        } else {
+            return "[/list]";
+        }
+    }
+
+    @Override
+    protected String getMarkdownTag() {
+        throw new UnsupportedOperationException("UnorderedList doesn't support getMarkdownTag!");
     }
 }

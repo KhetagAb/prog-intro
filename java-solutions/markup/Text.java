@@ -1,20 +1,10 @@
 package markup;
 
 public class Text implements ParagraphAble {
-    private final String text; // OK - NOTE: private
+    private final String text;
 
     public Text(String text) {
         this.text = text;
-    }
-
-    @Override
-    public String getBBTag() {
-        return "";
-    }
-
-    @Override
-    public String getMarkdownTag() {
-        return "";
     }
 
     @Override

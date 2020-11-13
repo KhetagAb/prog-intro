@@ -1,3 +1,3 @@
 package markup;
 
-interface ParagraphAble extends BBCodeAble, MarkdownAble { }
+interface ParagraphAble extends Element { }

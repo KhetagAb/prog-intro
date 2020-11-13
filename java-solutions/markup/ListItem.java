@@ -2,23 +2,22 @@ package markup;
 
 import java.util.List;
 
-public class ListItem implements BBCodeAble {
-    private final List<ListAble> elements;
-
+public class ListItem extends AbstractElement {
     public ListItem(List<ListAble> elements) {
-        this.elements = elements;
+        super(elements);
     }
 
     @Override
-    public String getBBTag() {
-        return "[*]";
-    }
-
-    @Override
-    public void toBBCode(StringBuilder sb) {
-        sb.append(getBBTag());
-        for (ListAble e: elements) {
-            e.toBBCode(sb);
+    protected String getBBTag(boolean isOpenTag) {
+        if (isOpenTag) {
+            return "[*]";
+        } else {
+            return "";
         }
+    }
+
+    @Override
+    protected String getMarkdownTag() {
+        throw new UnsupportedOperationException("ListItem doesn't support toMarkdown!");
     }
 }

@@ -1,6 +1,6 @@
 package markup;
 
-interface MarkdownAble {
+interface Element {
+    void toBBCode(StringBuilder sb);
     void toMarkdown(StringBuilder sb);
-    String getMarkdownTag();
 }
