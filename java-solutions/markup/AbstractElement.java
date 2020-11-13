@@ -9,8 +9,8 @@ public abstract class AbstractElement {
         this.elements = elements;
     }
 
-    public abstract String getBBTag();
-    public abstract String getMarkdownTag();
+    protected abstract String getBBTag();
+    protected abstract String getMarkdownTag();
 
     public void toMarkdown(StringBuilder sb) {
         sb.append(getMarkdownTag());

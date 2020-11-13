@@ -1,7 +1,7 @@
 package markup;
 
 public class Text implements ParagraphAble {
-    final String text;
+    protected final String text;
 
     public Text(String text) {
         this.text = text;

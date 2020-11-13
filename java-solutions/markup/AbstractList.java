@@ -9,7 +9,7 @@ public abstract class AbstractList {
         this.elements = elements;
     }
 
-    public abstract String getBBTag();
+    protected abstract String getBBTag();
 
     public void toBBCode(StringBuilder sb) {
         sb.append('[').append(getBBTag()).append(']');
