@@ -12,6 +12,7 @@ abstract class AbstractElement implements Element {
     protected abstract String getBBTag(boolean isOpenTag);
     protected abstract String getMarkdownTag();
 
+    @Override
     public void toMarkdown(StringBuilder sb) {
         sb.append(getMarkdownTag());
         for (Element e: elements) {
@@ -20,6 +21,7 @@ abstract class AbstractElement implements Element {
         sb.append(getMarkdownTag());
     }
 
+    @Override
     public void toBBCode(StringBuilder sb) {
         sb.append(getBBTag(true));
         for (Element e: elements) {
