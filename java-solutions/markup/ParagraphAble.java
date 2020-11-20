@@ -1,3 +1,3 @@
 package markup;
 
-interface ParagraphAble extends Element { }
+public interface ParagraphAble extends Element { }

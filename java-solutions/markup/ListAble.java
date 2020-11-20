@@ -1,3 +1,3 @@
 package markup;
 
-interface ListAble extends Element { }
+public interface ListAble extends Element { }
