@@ -48,7 +48,7 @@ public class MnkBoard implements IBoard, IPosition {
     }
 
     @FunctionalInterface
-    private interface isInFieldChecker {
+    public interface isInFieldChecker {
         boolean test(int row, int col);
     }
 
