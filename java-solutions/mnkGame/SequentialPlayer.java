@@ -1,7 +1,5 @@
 package mnkGame;
 
-import javax.swing.*;
-
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */

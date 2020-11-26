@@ -3,6 +3,6 @@ package mnkGame;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-enum Cell {
+public enum Cell {
     X, O, E
 }

@@ -30,12 +30,8 @@ public class HumanPlayer implements IPlayer {
 
             final Move move;
             try {
-                String line = in.nextLine();
-                Scanner sc = new Scanner(line);
-                try {
+                try (Scanner sc = new Scanner(in.nextLine())) {
                     move = new Move(sc.nextInt() - 1, sc.nextInt() - 1, cell);
-                } finally {
-                    sc.close();
                 }
             } catch (InputMismatchException e) {
                 out.println("Row and column must be integers!");

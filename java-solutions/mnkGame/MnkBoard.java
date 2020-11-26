@@ -11,21 +11,17 @@ public class MnkBoard implements IBoard, IPosition {
     );
 
     private final Cell[][] cells;
-    private final int rows, cols, winCntCond, bonusCntCond;
+    private final int rows, cols, winCntCond, skipCntCond;
     private final isInFieldChecker isInFieldChecker;
 
     private int fullCells = 0;
     private Cell turn;
 
-    public MnkBoard(int rows, int cols, int winCntCond, int bonusCntCond) {
-        this(rows, cols, winCntCond, bonusCntCond, (row, col) -> (0 <= row && row < rows && 0 <= col && col < cols));
-    }
-
-    public MnkBoard(int rows, int cols, int winCntCond, int bonusCntCond, isInFieldChecker isInFieldChecker) {
+    public MnkBoard(int rows, int cols, int winCntCond, int skipCntCond, isInFieldChecker isInFieldChecker) {
         this.rows = rows;
         this.cols = cols;
         this.winCntCond = winCntCond;
-        this.bonusCntCond = bonusCntCond;
+        this.skipCntCond = skipCntCond;
         this.cells = new Cell[rows][cols];
         for (Cell[] row : cells) {
             Arrays.fill(row, Cell.E);
@@ -38,7 +34,7 @@ public class MnkBoard implements IBoard, IPosition {
         int curRow = move.getRow(), curCol = move.getColumn();
 
         int cnt = 0;
-        while (isInFieldChecker.test(curRow, curCol) && getCell(curRow, curCol) == move.getValue()) {
+        while (getCell(curRow, curCol) == move.getValue()) {
             curRow += x;
             curCol += y;
             cnt++;
@@ -52,16 +48,15 @@ public class MnkBoard implements IBoard, IPosition {
     }
 
     @FunctionalInterface
-    public interface isInFieldChecker {
+    private interface isInFieldChecker {
         boolean test(int row, int col);
     }
 
     @Override
     public boolean isValid(Move move) {
         return move != null &&
-                isInFieldChecker.test(move.getRow(), move.getColumn())
-                && cells[move.getRow()][move.getColumn()] == Cell.E
-                && turn == move.getValue();
+                getCell(move.getRow(), move.getColumn()) == Cell.E &&
+                turn == move.getValue();
     }
 
     @Override
@@ -90,8 +85,8 @@ public class MnkBoard implements IBoard, IPosition {
             return Result.DRAW;
         }
 
-        if (maxInAnyLine >= bonusCntCond) {
-            return Result.BONUSTURN;
+        if (maxInAnyLine >= skipCntCond) {
+            return Result.SKIP;
         } else {
             turn = turn == Cell.X ? Cell.O : Cell.X;
         }
@@ -106,7 +101,7 @@ public class MnkBoard implements IBoard, IPosition {
         final StringBuilder sb = new StringBuilder();
 
         sb.append("POSITION (win condition: ").append(winCntCond)
-                .append(", bonus turn condition: ").append(bonusCntCond).append("):").append(System.lineSeparator())
+                .append(", bonus turn condition: ").append(skipCntCond).append("):").append(System.lineSeparator())
                 .append(" ".repeat(rowsTitleLength));
         for (int col = 1; col <= cols; col++) {
             sb.append(" ".repeat(colsTitleWidth + 1 - Integer.toString(col).length()))

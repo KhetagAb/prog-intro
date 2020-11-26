@@ -1,7 +1,7 @@
 package mnkGame;
 
 public class ProxyPosition implements IPosition {
-    final private IPosition position;
+    private final IPosition position;
 
     public ProxyPosition(IPosition position) {
         this.position = position;
