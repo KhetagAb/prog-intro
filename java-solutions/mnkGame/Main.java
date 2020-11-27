@@ -7,6 +7,8 @@ import java.util.Scanner;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class Main {
+    private final static boolean LOGGING = true;
+
     public static void main(String[] args) {
         int n, m, k;
         int countOfGames, firstPlayerType, secondPlayerType, boardType;
@@ -54,7 +56,7 @@ public class Main {
         IPlayer firstPlayer = selectPlayerType(firstPlayerType);
         IPlayer secondPlayer = selectPlayerType(secondPlayerType);
 
-        final Game game = new Game(true, firstPlayer, secondPlayer);
+        final Game game = new Game(LOGGING, firstPlayer, secondPlayer);
 
         int firstWins = 0, draws = 0, firstLoses = 0;
         for (int i = 0; i < countOfGames; i++) {
