@@ -15,35 +15,44 @@ public class Game {
 
     public int play(IBoard board) {
         while (true) {
-            final int result1 = move(board, player1, 1);
-            if (result1 != -1) {
-                return result1;
+            int result;
+            do {
+                result = move(board, player1, 1);
+            } while (result == -2);
+
+            if (result != -1) {
+                return result;
             }
-            final int result2 = move(board, player2, 2);
-            if (result2 != -1) {
-                return result2;
+
+            do {
+                result = move(board, player2, 2);
+            } while (result == -2);
+
+            if (result != -1) {
+                return result;
             }
         }
     }
 
     private int move(final IBoard board, final IPlayer player, final int no) {
-        while (true) {
-            final Move move = player.move(board.getPosition(), board.getTurnCell());
-            final Result result = board.makeMove(move);
-            log("Player " + no + " move: " + move);
-            log(board.toString());
-            if (result == Result.WIN) {
-                log("Player " + no + " won");
-                return no;
-            } else if (result == Result.LOSE) {
-                log("Player " + no + " lose");
-                return 3 - no;
-            } else if (result == Result.DRAW) {
-                log("Draw");
-                return 0;
-            } else if (result == Result.UNKNOWN) {
-                return -1;
-            }
+        final Move move = player.move(board.getPosition(), board.getTurnCell());
+        final Result result = board.makeMove(move);
+        log("Player " + no + " move: " + move);
+        log(board.toString());
+        if (result == Result.WIN) {
+            log("Player " + no + " won");
+            return no;
+        } else if (result == Result.LOSE) {
+            log("Player " + no + " lose");
+            return 3 - no;
+        } else if (result == Result.DRAW) {
+            log("Draw");
+            return 0;
+        } else if (result == Result.SKIP) {
+            log("Bonus turn");
+            return -2;
+        } else {
+            return -1;
         }
     }
 
