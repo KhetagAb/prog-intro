@@ -31,6 +31,11 @@ public class MnkBoard implements IBoard, IPosition {
     }
 
     private int countInDirection(Move move, int x, int y) {
+//        for (
+//                int curRow = move.getRow(), curCol = move.getColumn();
+//                getCell(curRow, curCol) == move.getValue();
+//                curRow += x, curCol += y, cnt++
+//        ) { /*empty*/ }
         int curRow = move.getRow(), curCol = move.getColumn();
 
         int cnt = 0;
@@ -44,7 +49,7 @@ public class MnkBoard implements IBoard, IPosition {
     }
 
     private int longestInDir(Move move, int x, int y) {
-        return (countInDirection(move, x, y) + countInDirection(move, -x, -y) - 1);
+        return countInDirection(move, x, y) + countInDirection(move, -x, -y) - 1;
     }
 
     @FunctionalInterface
@@ -71,7 +76,8 @@ public class MnkBoard implements IBoard, IPosition {
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 if ((x != 0 || y != 0)) {
-                    maxInAnyLine = Integer.max(maxInAnyLine, longestInDir(move, x , y));
+                    // :NOTE: Меньше проверок
+                    maxInAnyLine = Integer.max(maxInAnyLine, longestInDir(move, x, y));
                 }
             }
         }

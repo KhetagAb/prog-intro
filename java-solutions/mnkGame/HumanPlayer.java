@@ -30,6 +30,7 @@ public class HumanPlayer implements IPlayer {
 
             final Move move;
             try {
+                // :NOTE: Управление на исключениях
                 try (Scanner sc = new Scanner(in.nextLine())) {
                     move = new Move(sc.nextInt() - 1, sc.nextInt() - 1, cell);
                 }

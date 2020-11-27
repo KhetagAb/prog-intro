@@ -15,6 +15,7 @@ public class Game {
 
     public int play(IBoard board) {
         while (true) {
+            // :NOTE: кописта
             int result;
             do {
                 result = move(board, player1, 1);

@@ -21,6 +21,7 @@ public class Main {
             System.out.println("(Board types: 0 - Square, 1 - Rhombus, 2 - Circle)");
 
             try {
+                // :NOTE: Копипаста
                 try (Scanner tsc = new Scanner(sc.nextLine())) {
                     n = Integer.parseInt(tsc.next());
                     m = Integer.parseInt(tsc.next());
@@ -71,19 +72,14 @@ public class Main {
     }
 
     private static IPlayer selectPlayerType(int playerType) {
-        IPlayer player;
         switch (playerType) {
             case 1:
-                player = new SequentialPlayer();
-                break;
+                return new SequentialPlayer();
             case 2:
-                player = new RandomPlayer();
-                break;
+                return new RandomPlayer();
             default:
-                player = new HumanPlayer();
-                break;
+                return new HumanPlayer();
         }
-        return player;
     }
 
     private static IBoard selectBoardType(int boardType, int n, int m, int k) {
