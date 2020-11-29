@@ -24,7 +24,7 @@ public class GameController implements IController {
 
                 return Integer.parseInt(in.nextLine());
             } catch (NumberFormatException e) {
-                out.println("It must be only one integer!");
+                out.println("It must be only one integer within reasonable limits!");
             }
         }
     }
