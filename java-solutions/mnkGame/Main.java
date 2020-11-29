@@ -1,57 +1,55 @@
 package mnkGame;
 
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.function.Predicate;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class Main {
     private final static boolean LOGGING = true;
+    private final static int SKIP_COND = 4;
+
+    private static IController gc;
+
+    private static int getIntInput(String name, Predicate<Integer> validator) {
+        while (true) {
+            int input = gc.intInputFor(name);
+            if (validator.test(input)) {
+                return input;
+            } else {
+                gc.showMsg("Invalid " + name + " parameter.");
+            }
+        }
+    }
 
     public static void main(String[] args) {
+        gc = new GameController(System.out, System.in);
+
         int n, m, k;
         int countOfGames, firstPlayerType, secondPlayerType, boardType;
 
-        Scanner sc = new Scanner(System.in);
+        Predicate<Integer> isPositive = x -> x > 0;
+        Predicate<Integer> inRange = x -> 0 <= x && x <= 2;
 
-        System.out.println("Enter n, m, k, <countOfGames>, <firstPlayerType>, <secondPlayerType>, <boardType> parameters: ");
-        while (true) {
-            System.out.println("(Player types: 0 - HumanPlayer, 1 - SequentialPlayer, 2 - RandomPlayer)");
-            System.out.println("(Board types: 0 - Square, 1 - Rhombus, 2 - Circle)");
+        try {
+            gc.showMsg("(Board types: 0 - Square, 1 - Rhombus, 2 - Circle)");
+            boardType = getIntInput("board type", inRange);
 
-            try {
-                // :NOTE: Копипаста
-                try (Scanner tsc = new Scanner(sc.nextLine())) {
-                    n = Integer.parseInt(tsc.next());
-                    m = Integer.parseInt(tsc.next());
-                    k = Integer.parseInt(tsc.next());
-                    countOfGames = Integer.parseInt(tsc.next());
-                    firstPlayerType = Integer.parseInt(tsc.next());
-                    secondPlayerType = Integer.parseInt(tsc.next());
-                    boardType = Integer.parseInt(tsc.next());
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Parameters must be integers.");
-                continue;
-            } catch (NoSuchElementException e) {
-                System.out.println("Too few type parameters.");
-                continue;
-            }
-
-            if (countOfGames <= 0) {
-                System.out.println("Invalid count of games!");
-            } else if (firstPlayerType < 0 || firstPlayerType > 2 || secondPlayerType < 0 || secondPlayerType > 2) {
-                System.out.println("Invalid player types!");
-            } else if (boardType < 0 || boardType > 2) {
-                System.out.println("Invalid board type!");
-            } else if (n <= 0 || m <= 0 || k < 0) {
-                System.out.println("Invalid board parameters!");
-            } else if ((boardType == 1 || boardType == 2) && n != m) {
-                System.out.println("This board type support only square size board (n = m)");
+            if (boardType == 0) {
+                n = getIntInput("n", isPositive);
+                m = getIntInput("m", isPositive);
             } else {
-                break;
+                m = n = getIntInput("side", isPositive);
             }
+            k = getIntInput("k", isPositive);
+            countOfGames = getIntInput("count of games", isPositive);
+
+            gc.showMsg("(Player types: 0 - HumanPlayer, 1 - SequentialPlayer, 2 - RandomPlayer)");
+            firstPlayerType = getIntInput("first player type", inRange);
+            secondPlayerType = getIntInput("second player type", inRange);
+        } catch (IllegalStateException e) {
+            gc.showMsg("Input error: " + e.getMessage() + ".");
+            return;
         }
 
         IPlayer firstPlayer = selectPlayerType(firstPlayerType);
@@ -61,14 +59,20 @@ public class Main {
 
         int firstWins = 0, draws = 0, firstLoses = 0;
         for (int i = 0; i < countOfGames; i++) {
-            int result = game.play(selectBoardType(boardType, n, m, k));
+            int result;
+            try {
+                result = game.play(selectBoardType(boardType, n, m, k));
+            } catch (IllegalStateException e) {
+                gc.showMsg("Input error during game: " + e.getMessage());
+                return;
+            }
 
             draws += result == 0 ? 1 : 0;
             firstWins += result == 1 ? 1 : 0;
             firstLoses += result == 2 ? 1 : 0;
         }
 
-        System.out.println("Count: " + countOfGames + ". First's wins: " + firstWins + ". First loses: " + firstLoses + ". Draws: " + draws);
+        gc.showMsg("Count: " + countOfGames + ". First's wins: " + firstWins + ". First loses: " + firstLoses + ". Draws: " + draws);
     }
 
     private static IPlayer selectPlayerType(int playerType) {
@@ -83,18 +87,13 @@ public class Main {
     }
 
     private static IBoard selectBoardType(int boardType, int n, int m, int k) {
-        IBoard board;
         switch (boardType) {
             case 1:
-                board = new RhombusMnkBoard(n, k, 4);
-                break;
+                return new RhombusMnkBoard(n, k, SKIP_COND);
             case 2:
-                board = new CircleMnkBoard(n, k, 4);
-                break;
+                return new CircleMnkBoard(n, k, SKIP_COND);
             default:
-                board = new SquareMnkBoard(n, m, k, 4);
-                break;
+                return new SquareMnkBoard(n, m, k, SKIP_COND);
         }
-        return board;
     }
 }

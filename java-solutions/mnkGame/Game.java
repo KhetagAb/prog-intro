@@ -15,24 +15,25 @@ public class Game {
 
     public int play(IBoard board) {
         while (true) {
-            // :NOTE: кописта
-            int result;
-            do {
-                result = move(board, player1, 1);
-            } while (result == -2);
-
-            if (result != -1) {
-                return result;
+            final int result1 = playerMove(board, player1, 1);
+            if (result1 != -1) {
+                return result1;
             }
 
-            do {
-                result = move(board, player2, 2);
-            } while (result == -2);
-
-            if (result != -1) {
-                return result;
+            final int result2 = playerMove(board, player2, 2);
+            if (result2 != -1) {
+                return result2;
             }
         }
+    }
+
+    private int playerMove(final IBoard board, final IPlayer player, final int no) {
+        int result;
+        do {
+            result = move(board, player, no);
+        } while (result == -2);
+
+        return result;
     }
 
     private int move(final IBoard board, final IPlayer player, final int no) {

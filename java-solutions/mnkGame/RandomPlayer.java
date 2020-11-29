@@ -13,7 +13,7 @@ public class RandomPlayer implements IPlayer {
     }
 
     public RandomPlayer() {
-        this(new Random(1));
+        this(new Random());
     }
 
     @Override

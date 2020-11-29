@@ -23,8 +23,8 @@ public class ProxyPosition implements IPosition {
     }
 
     @Override
-    public int getWinCntCond() {
-        return position.getWinCntCond();
+    public int getWinCond() {
+        return position.getWinCond();
     }
 
     @Override

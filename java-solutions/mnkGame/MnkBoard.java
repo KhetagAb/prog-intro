@@ -11,23 +11,32 @@ public class MnkBoard implements IBoard, IPosition {
     );
 
     private final Cell[][] cells;
-    private final int rows, cols, winCntCond, skipCntCond;
-    private final isInFieldChecker isInFieldChecker;
+    private final int rows, cols, winCond, skipCntCond;
 
-    private int fullCells = 0;
+    @FunctionalInterface
+    public interface isInFieldChecker {
+        boolean test(int row, int col);
+    }
+
+    private int emptyCells;
     private Cell turn;
 
     public MnkBoard(int rows, int cols, int winCntCond, int skipCntCond, isInFieldChecker isInFieldChecker) {
         this.rows = rows;
         this.cols = cols;
-        this.winCntCond = winCntCond;
+        this.winCond = winCntCond;
         this.skipCntCond = skipCntCond;
         this.cells = new Cell[rows][cols];
-        for (Cell[] row : cells) {
-            Arrays.fill(row, Cell.E);
+        for (int row = 0; row < rows; row++) {
+            Arrays.fill(cells[row], Cell.I);
+            for (int col = 0; col < cols; col++) {
+                if (isInFieldChecker.test(row, col)) {
+                    emptyCells++;
+                    cells[row][col] = Cell.E;
+                }
+            }
         }
         turn = Cell.X;
-        this.isInFieldChecker = isInFieldChecker;
     }
 
     private int countInDirection(Move move, int x, int y) {
@@ -52,11 +61,6 @@ public class MnkBoard implements IBoard, IPosition {
         return countInDirection(move, x, y) + countInDirection(move, -x, -y) - 1;
     }
 
-    @FunctionalInterface
-    public interface isInFieldChecker {
-        boolean test(int row, int col);
-    }
-
     @Override
     public boolean isValid(Move move) {
         return move != null &&
@@ -73,21 +77,19 @@ public class MnkBoard implements IBoard, IPosition {
         cells[move.getRow()][move.getColumn()] = move.getValue();
 
         int maxInAnyLine = 0;
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                if ((x != 0 || y != 0)) {
-                    // :NOTE: Меньше проверок
-                    maxInAnyLine = Integer.max(maxInAnyLine, longestInDir(move, x, y));
-                }
+
+        for (int x = -1; x <= 0; x++) {
+            for (int y = -1; y <= 1 && Math.abs(x) + Math.abs(y) > 0; y++) {
+                maxInAnyLine = Integer.max(maxInAnyLine, longestInDir(move, x, y));
             }
         }
 
-        if (maxInAnyLine >= winCntCond) {
+        if (maxInAnyLine >= winCond) {
             return Result.WIN;
         }
 
-        fullCells++;
-        if (fullCells == cols * rows) {
+        emptyCells--;
+        if (emptyCells <= 0) {
             return Result.DRAW;
         }
 
@@ -106,7 +108,7 @@ public class MnkBoard implements IBoard, IPosition {
         int rowsTitleLength = Integer.toString(rows).length();
         final StringBuilder sb = new StringBuilder();
 
-        sb.append("POSITION (win condition: ").append(winCntCond)
+        sb.append("POSITION (win condition: ").append(winCond)
                 .append(", bonus turn condition: ").append(skipCntCond).append("):").append(System.lineSeparator())
                 .append(" ".repeat(rowsTitleLength));
         for (int col = 1; col <= cols; col++) {
@@ -119,7 +121,7 @@ public class MnkBoard implements IBoard, IPosition {
                     .append(" ".repeat(rowsTitleLength - Integer.toString(row + 1).length()))
                     .append(row + 1);
             for (int col = 0; col < cols; col++) {
-                if (isInFieldChecker.test(row, col)) {
+                if (isInField(row, col)) {
                     sb.append(" ".repeat(colsTitleWidth))
                             .append(SYMBOLS.get(cells[row][col]));
                 } else {
@@ -153,16 +155,20 @@ public class MnkBoard implements IBoard, IPosition {
     }
 
     @Override
-    public int getWinCntCond() {
-        return winCntCond;
+    public int getWinCond() {
+        return winCond;
     }
 
     @Override
     public Cell getCell(int row, int col) {
-        if (isInFieldChecker.test(row, col)) {
+        if (isInField(row, col)) {
             return cells[row][col];
         } else {
-            return null;
+            return Cell.I;
         }
+    }
+
+    private boolean isInField(int row, int col) {
+        return row >= 0 && col >= 0 && row < rows && col < cols && cells[row][col] != Cell.I;
     }
 }

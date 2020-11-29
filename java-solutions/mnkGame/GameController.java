@@ -1,2 +1,36 @@
-package mnkGame;public class GameController {
+package mnkGame;
+
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.Scanner;
+
+public class GameController implements IController {
+    private final PrintStream out;
+    private final Scanner in;
+
+    public GameController(PrintStream out, InputStream in) {
+        this.in = new Scanner(in);
+        this.out = out;
+    }
+
+    @Override
+    public int intInputFor(String name) {
+        while (true) {
+            out.print("Enter " + name + ": ");
+            try {
+                if (!in.hasNextLine()) {
+                    throw new IllegalStateException("End of input");
+                }
+
+                return Integer.parseInt(in.nextLine());
+            } catch (NumberFormatException e) {
+                out.println("It must be only one integer!");
+            }
+        }
+    }
+
+    @Override
+    public void showMsg(String msg) {
+        out.println(msg);
+    }
 }
