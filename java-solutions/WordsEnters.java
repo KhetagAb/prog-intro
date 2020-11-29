@@ -1,7 +1,5 @@
-import java.util.Arrays;
-
 public class WordsEnters {
-    private IntList entries = new IntList();
+    private final IntList entries = new IntList();
     private int lastEntry = -1;
 
     public int countOfWords = 0;

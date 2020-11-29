@@ -1,9 +1,8 @@
 import java.util.*;
 import java.io.*;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
-public class FastScanner {
+public class FastScanner implements AutoCloseable {
     @FunctionalInterface
     public interface TokenChecker {
         boolean test(char ch);
@@ -17,9 +16,6 @@ public class FastScanner {
 
     private int lineNumOfToken = 0;
     private int lastChar = -1;
-
-    // == Optional
-    private boolean isIntToken;
 
     public FastScanner(String fileName, Charset cs, TokenChecker checker) throws FileNotFoundException {
         reader = new BufferedReader(
@@ -96,9 +92,10 @@ public class FastScanner {
         readToken();
 
         hasToken = false;
-        return new String(token);
+        return token;
     }
 
+    @Override
     public void close() throws IOException {
         reader.close();
     }
