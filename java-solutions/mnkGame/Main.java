@@ -62,8 +62,8 @@ public class Main {
             int result;
             try {
                 result = game.play(selectBoardType(boardType, n, m, k));
-            } catch (IllegalStateException e) {
-                gc.showMsg("Input error during game: " + e.getMessage());
+            } catch (IllegalStateException | OutOfMemoryError e) {
+                gc.showMsg("Error during game: " + e.getMessage() + ".");
                 return;
             }
 

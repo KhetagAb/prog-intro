@@ -2,6 +2,7 @@ package mnkGame;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class MnkBoard implements IBoard, IPosition {
     private static final Map<Cell, Character> SYMBOLS = Map.of(
@@ -75,31 +76,25 @@ public class MnkBoard implements IBoard, IPosition {
         }
 
         cells[move.getRow()][move.getColumn()] = move.getValue();
+        emptyCells--;
 
         int maxInAnyLine = 0;
-
         for (int x = -1; x <= 0; x++) {
-            for (int y = -1; y <= 1 && Math.abs(x) + Math.abs(y) > 0; y++) {
+            for (int y = -1; (x != 0 || y != 0) && y <= 1; y++) {
                 maxInAnyLine = Integer.max(maxInAnyLine, longestInDir(move, x, y));
             }
         }
 
         if (maxInAnyLine >= winCond) {
             return Result.WIN;
-        }
-
-        emptyCells--;
-        if (emptyCells <= 0) {
+        } else if (emptyCells <= 0) {
             return Result.DRAW;
-        }
-
-        if (maxInAnyLine >= skipCntCond) {
+        } else if (maxInAnyLine >= skipCntCond) {
             return Result.SKIP;
         } else {
             turn = turn == Cell.X ? Cell.O : Cell.X;
+            return Result.UNKNOWN;
         }
-
-        return Result.UNKNOWN;
     }
 
     @Override
@@ -125,8 +120,13 @@ public class MnkBoard implements IBoard, IPosition {
                     sb.append(" ".repeat(colsTitleWidth))
                             .append(SYMBOLS.get(cells[row][col]));
                 } else {
+                    char toAppend = ' ';
+                    if (rows > 15) {
+                        toAppend = row % 4 == 0 && col % 4 == 0 ? '+' : (row % 4 == 0 ? '-' : (col % 4 == 0 ? '|' : ' '));
+                    }
+
                     sb.append(" ".repeat(colsTitleWidth))
-                            .append(row % 4 == 0 && col % 4 == 0 ? '+' : (row % 4 == 0 ? '-' : (col % 4 == 0 ? '|' : ' ')));
+                            .append(toAppend);
                 }
             }
         }
@@ -169,6 +169,10 @@ public class MnkBoard implements IBoard, IPosition {
     }
 
     private boolean isInField(int row, int col) {
-        return row >= 0 && col >= 0 && row < rows && col < cols && cells[row][col] != Cell.I;
+        return row >= 0 &&
+                col >= 0 &&
+                row < rows &&
+                col < cols &&
+                cells[row][col] != Cell.I;
     }
 }
