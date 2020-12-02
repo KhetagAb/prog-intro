@@ -20,7 +20,7 @@ public class HumanPlayer implements IPlayer {
     @Override
     public Move move(final IPosition position, final Cell cell) {
         while (true) {
-            gc.showMsg(position.toString());
+            gc.showPosition(position);
             gc.showMsg(cell + "'s move");
 
             final int row = gc.intInputFor("Row");

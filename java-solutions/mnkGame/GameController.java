@@ -30,6 +30,11 @@ public class GameController implements IController {
     }
 
     @Override
+    public void showPosition(IPosition position) {
+        showMsg(position.toString());
+    }
+
+    @Override
     public void showMsg(String msg) {
         out.println(msg);
     }
