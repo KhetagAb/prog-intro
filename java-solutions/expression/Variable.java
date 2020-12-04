@@ -1,7 +1,5 @@
 package expression;
 
-import java.util.Objects;
-
 public class Variable implements CommonExpression {
     private final String name;
 
