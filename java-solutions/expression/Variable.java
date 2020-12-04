@@ -49,7 +49,7 @@ public class Variable implements CommonExpression {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(name);
+        return name.hashCode();
     }
 
     @Override

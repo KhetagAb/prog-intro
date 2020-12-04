@@ -40,7 +40,7 @@ public class Const implements CommonExpression {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(value);
+        return value.hashCode();
     }
 
     @Override
