@@ -22,6 +22,7 @@ public class GameController implements IController {
                     throw new IllegalStateException("End of input");
                 }
 
+                // :NOTE: parseInt
                 return Integer.parseInt(in.nextLine());
             } catch (NumberFormatException e) {
                 out.println("It must be only one integer within reasonable limits!");

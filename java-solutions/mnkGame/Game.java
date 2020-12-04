@@ -4,6 +4,7 @@ package mnkGame;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class Game {
+    public static final int EXTRA_TURN = -2;
     private final boolean log;
     private final IPlayer player1, player2;
 
@@ -31,7 +32,7 @@ public class Game {
         int result;
         do {
             result = move(board, player, no);
-        } while (result == -2);
+        } while (result == EXTRA_TURN);
 
         return result;
     }
@@ -52,7 +53,7 @@ public class Game {
             return 0;
         } else if (result == Result.SKIP) {
             log("Bonus turn");
-            return -2;
+            return EXTRA_TURN;
         } else {
             return -1;
         }
