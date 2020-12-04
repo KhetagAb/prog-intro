@@ -32,7 +32,7 @@ public class Main {
         Predicate<Integer> inRange = x -> 0 <= x && x <= 2;
 
         try {
-            gc.showMsg("(Board types: 0 - Square, 1 - Rhombus, 2 - Circle)");
+            gc.showMsg("(Board types: 0 - Rectangle, 1 - Rhombus, 2 - Circle)");
             boardType = getIntInput("board type", inRange);
 
             if (boardType == 0) {
@@ -49,6 +49,7 @@ public class Main {
             secondPlayerType = getIntInput("second player type", inRange);
         } catch (IllegalStateException e) {
             gc.showMsg("Input error: " + e.getMessage() + ".");
+            exit();
             return;
         }
 
@@ -64,6 +65,7 @@ public class Main {
                 result = game.play(selectBoardType(boardType, n, m, k));
             } catch (IllegalStateException | OutOfMemoryError e) {
                 gc.showMsg("Error during game: " + e.getMessage() + ".");
+                exit();
                 return;
             }
 
@@ -73,6 +75,12 @@ public class Main {
         }
 
         gc.showMsg("Count: " + countOfGames + ". First's wins: " + firstWins + ". First loses: " + firstLoses + ". Draws: " + draws);
+
+        exit();
+    }
+
+    private static void exit() {
+        gc.close();
     }
 
     private static IPlayer selectPlayerType(int playerType) {

@@ -3,7 +3,7 @@ package mnkGame;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-final class Move {
+public final class Move {
     private final int row;
     private final int column;
     private final Cell value;

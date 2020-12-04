@@ -8,7 +8,6 @@ public interface IPosition {
 
     int getCols();
     int getRows();
-    int getWinCond();
 
     Cell getCell(int row, int col);
 }

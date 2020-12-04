@@ -5,4 +5,5 @@ public interface IController {
     void showPosition(IPosition position);
 
     void showMsg(String msg);
+    void close();
 }

@@ -38,4 +38,10 @@ public class GameController implements IController {
     public void showMsg(String msg) {
         out.println(msg);
     }
+
+    @Override
+    public void close() {
+        in.close();
+        out.close();
+    }
 }

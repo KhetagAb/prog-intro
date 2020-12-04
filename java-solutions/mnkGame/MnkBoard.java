@@ -2,13 +2,12 @@ package mnkGame;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.function.Predicate;
 
 public class MnkBoard implements IBoard, IPosition {
     private static final Map<Cell, Character> SYMBOLS = Map.of(
             Cell.X, 'X',
             Cell.O, 'O',
-            Cell.E, '.'
+            Cell.EMPTY, '.'
     );
 
     private final Cell[][] cells;
@@ -29,11 +28,11 @@ public class MnkBoard implements IBoard, IPosition {
         this.skipCntCond = skipCntCond;
         this.cells = new Cell[rows][cols];
         for (int row = 0; row < rows; row++) {
-            Arrays.fill(cells[row], Cell.I);
+            Arrays.fill(cells[row], Cell.INVALID);
             for (int col = 0; col < cols; col++) {
                 if (isInFieldChecker.test(row, col)) {
                     emptyCells++;
-                    cells[row][col] = Cell.E;
+                    cells[row][col] = Cell.EMPTY;
                 }
             }
         }
@@ -65,7 +64,7 @@ public class MnkBoard implements IBoard, IPosition {
     @Override
     public boolean isValid(Move move) {
         return move != null &&
-                getCell(move.getRow(), move.getColumn()) == Cell.E &&
+                getCell(move.getRow(), move.getColumn()) == Cell.EMPTY &&
                 turn == move.getValue();
     }
 
@@ -155,16 +154,11 @@ public class MnkBoard implements IBoard, IPosition {
     }
 
     @Override
-    public int getWinCond() {
-        return winCond;
-    }
-
-    @Override
     public Cell getCell(int row, int col) {
         if (isInField(row, col)) {
             return cells[row][col];
         } else {
-            return Cell.I;
+            return Cell.INVALID;
         }
     }
 
@@ -173,6 +167,6 @@ public class MnkBoard implements IBoard, IPosition {
                 col >= 0 &&
                 row < rows &&
                 col < cols &&
-                cells[row][col] != Cell.I;
+                cells[row][col] != Cell.INVALID;
     }
 }

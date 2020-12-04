@@ -21,12 +21,12 @@ public class Add extends BinaryOperation {
     }
 
     @Override
-    protected int operate(int first, int second) {
-        return first + second;
+    protected int operate(int left, int right) {
+        return left + right;
     }
 
     @Override
-    protected double operate(double first, double second) {
-        return first + second;
+    protected double operate(double left, double right) {
+        return left + right;
     }
 }

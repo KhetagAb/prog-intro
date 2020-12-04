@@ -23,11 +23,6 @@ public class ProxyPosition implements IPosition {
     }
 
     @Override
-    public int getWinCond() {
-        return position.getWinCond();
-    }
-
-    @Override
     public Cell getCell(int row, int col) {
         return position.getCell(row, col);
     }

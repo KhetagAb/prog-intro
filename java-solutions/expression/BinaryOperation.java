@@ -8,8 +8,8 @@ public abstract class BinaryOperation implements CommonExpression {
     protected abstract String getSymbol();
     protected abstract int getRank();
     protected abstract boolean isOrdered();
-    protected abstract int operate(int first, int second);
-    protected abstract double operate(double first, double second);
+    protected abstract int operate(int left, int right);
+    protected abstract double operate(double left, double right);
 
     protected BinaryOperation(CommonExpression left, CommonExpression right) {
         this.left = left;
@@ -51,7 +51,9 @@ public abstract class BinaryOperation implements CommonExpression {
 
     @Override
     public String toString() {
-        return "(" + left.toString() + " " + getSymbol() + " " + right.toString() + ")";
+        return "(" + left.toString() +
+                " " + getSymbol() + " " +
+                right.toString() + ")";
     }
 
     @Override
@@ -62,7 +64,7 @@ public abstract class BinaryOperation implements CommonExpression {
             BinaryOperation bo = (BinaryOperation) obj;
             return left.equals(bo.left) && right.equals(bo.right);
         }
-    }
+    } 
 
     @Override
     public int hashCode() {
