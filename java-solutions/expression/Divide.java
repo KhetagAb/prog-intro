@@ -16,7 +16,7 @@ public class Divide extends BinaryOperation {
     }
 
     @Override
-    protected boolean isOrdered() {
+    protected boolean isNotCommutative() {
         return true;
     }
 

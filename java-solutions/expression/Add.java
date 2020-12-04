@@ -16,7 +16,7 @@ public class Add extends BinaryOperation {
     }
 
     @Override
-    public boolean isOrdered() {
+    public boolean isNotCommutative() {
         return false;
     }
     

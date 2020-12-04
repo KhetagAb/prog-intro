@@ -16,7 +16,7 @@ public class Multiply extends BinaryOperation {
     }
 
     @Override
-    protected boolean isOrdered() {
+    protected boolean isNotCommutative() {
         return false;
     }
 

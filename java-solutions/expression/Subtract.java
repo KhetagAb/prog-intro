@@ -16,7 +16,7 @@ public class Subtract extends BinaryOperation {
     }
 
     @Override
-    protected boolean isOrdered() {
+    protected boolean isNotCommutative() {
         return true;
     }
 
