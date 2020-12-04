@@ -1,3 +1,5 @@
 package expression;
 
-public interface CommonExpression extends Expression, TripleExpression, DoubleExpression { }
+public interface CommonExpression extends Expression, TripleExpression, DoubleExpression {
+    int getRank();
+}

@@ -11,15 +11,15 @@ public class Add extends BinaryOperation {
     }
 
     @Override
-    protected int getRank() {
+    public int getRank() {
         return 0;
     }
 
     @Override
-    protected boolean isOrdered() {
+    public boolean isOrdered() {
         return false;
     }
-
+    
     @Override
     protected int operate(int left, int right) {
         return left + right;

@@ -6,7 +6,6 @@ public abstract class BinaryOperation implements CommonExpression {
     protected final CommonExpression left, right;
 
     protected abstract String getSymbol();
-    protected abstract int getRank();
     protected abstract boolean isOrdered();
     protected abstract int operate(int left, int right);
     protected abstract double operate(double left, double right);
@@ -31,15 +30,13 @@ public abstract class BinaryOperation implements CommonExpression {
         return operate(left.evaluate(x), right.evaluate(x));
     }
 
-    private String getMinExpression(final CommonExpression expression, boolean isRight) {
-        if (expression instanceof BinaryOperation) {
-            BinaryOperation bo = (BinaryOperation) expression;
-            if (bo.getRank() < getRank() ||
-                    bo.getRank() == getRank() && isRight && (bo.isOrdered() || isOrdered()))
-                return "(" + expression.toMiniString() + ")";
+    private String getMinExpression(final CommonExpression ex, boolean isRight) {
+        boolean isBinBrackets = ex instanceof BinaryOperation && isRight && (((BinaryOperation) ex).isOrdered() || isOrdered());
+        if (ex.getRank() < getRank() || ex.getRank() == getRank() && isBinBrackets) {
+            return "(" + ex.toMiniString() + ")";
         }
 
-        return expression.toMiniString();
+        return ex.toMiniString();
     }
 
     @Override

@@ -51,4 +51,9 @@ public class Variable implements CommonExpression {
     public int hashCode() {
         return Objects.hashCode(name);
     }
+
+    @Override
+    public int getRank() {
+        return Integer.MAX_VALUE;
+    }
 }

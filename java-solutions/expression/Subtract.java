@@ -11,7 +11,7 @@ public class Subtract extends BinaryOperation {
     }
 
     @Override
-    protected int getRank() {
+    public int getRank() {
         return 0;
     }
 

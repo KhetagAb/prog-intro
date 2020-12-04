@@ -11,7 +11,7 @@ public class Divide extends BinaryOperation {
     }
 
     @Override
-    protected int getRank() {
+    public int getRank() {
         return 1;
     }
 
