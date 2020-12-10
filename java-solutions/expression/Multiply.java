@@ -16,8 +16,13 @@ public class Multiply extends BinaryOperation {
     }
 
     @Override
-    protected boolean isNotCommutative() {
-        return false;
+    protected boolean isAssociative() {
+        return true;
+    }
+
+    @Override
+    protected boolean isContinuous() {
+        return true;
     }
 
     @Override

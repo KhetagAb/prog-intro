@@ -16,10 +16,15 @@ public class Add extends BinaryOperation {
     }
 
     @Override
-    public boolean isNotCommutative() {
-        return false;
+    protected boolean isAssociative() {
+        return true;
     }
-    
+
+    @Override
+    protected boolean isContinuous() {
+        return true;
+    }
+
     @Override
     protected int operate(int left, int right) {
         return left + right;

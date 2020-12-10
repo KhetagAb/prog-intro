@@ -16,11 +16,15 @@ public class Divide extends BinaryOperation {
     }
 
     @Override
-    protected boolean isNotCommutative() {
-        return true;
+    protected boolean isAssociative() {
+        return false;
     }
 
     @Override
+    protected boolean isContinuous() {
+        return false;
+    }
+
     protected int operate(int left, int right) {
         return left / right;
     }
