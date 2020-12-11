@@ -52,6 +52,6 @@ public class Variable implements CommonExpression {
 
     @Override
     public int getRank() {
-        return Integer.MAX_VALUE;
+        return Operations.VAR.getRank();
     }
 }

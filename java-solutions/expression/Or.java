@@ -1,18 +1,18 @@
 package expression;
 
 public class Or extends BinaryOperation {
-    protected Or(CommonExpression left, CommonExpression right) {
+    public Or(CommonExpression left, CommonExpression right) {
         super(left, right);
     }
 
     @Override
     protected String getSymbol() {
-        return "|";
+        return Operations.OR.getSymbol();
     }
 
     @Override
     public int getRank() {
-        return -3;
+        return Operations.OR.getRank();
     }
 
     @Override

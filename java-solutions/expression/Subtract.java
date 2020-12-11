@@ -7,14 +7,13 @@ public class Subtract extends BinaryOperation {
 
     @Override
     protected String getSymbol() {
-        return "-";
+        return Operations.SUB.getSymbol();
     }
 
     @Override
     public int getRank() {
-        return 0;
+        return Operations.SUB.getRank();
     }
-
     @Override
     protected boolean isAssociative() {
         return false;

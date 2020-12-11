@@ -1,18 +1,18 @@
 package expression;
 
 public class And extends BinaryOperation {
-    protected And(CommonExpression left, CommonExpression right) {
+    public And(CommonExpression left, CommonExpression right) {
         super(left, right);
     }
 
     @Override
     protected String getSymbol() {
-        return "&";
+        return Operations.AND.getSymbol();
     }
 
     @Override
     public int getRank() {
-        return -1;
+        return Operations.AND.getRank();
     }
 
     @Override

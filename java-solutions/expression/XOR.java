@@ -1,18 +1,18 @@
 package expression;
 
 public class XOR extends BinaryOperation {
-    protected XOR(CommonExpression left, CommonExpression right) {
+    public XOR(CommonExpression left, CommonExpression right) {
         super(left, right);
     }
 
     @Override
     protected String getSymbol() {
-        return "^";
+        return Operations.XOR.getSymbol();
     }
 
     @Override
     public int getRank() {
-        return -2;
+        return Operations.XOR.getRank();
     }
 
     @Override

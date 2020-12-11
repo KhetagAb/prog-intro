@@ -17,6 +17,6 @@ public class Low extends UnaryOperation {
 
     @Override
     protected String getSymbol() {
-        return "low ";
+        return Operations.LOW.getSymbol();
     }
 }

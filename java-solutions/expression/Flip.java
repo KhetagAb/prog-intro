@@ -25,6 +25,6 @@ public class Flip extends UnaryOperation {
 
     @Override
     protected String getSymbol() {
-        return "flip ";
+        return Operations.FLIP.getSymbol();
     }
 }

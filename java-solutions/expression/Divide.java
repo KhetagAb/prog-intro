@@ -7,14 +7,13 @@ public class Divide extends BinaryOperation {
 
     @Override
     protected String getSymbol() {
-        return "/";
+        return Operations.DIV.getSymbol();
     }
 
     @Override
     public int getRank() {
-        return 1;
+        return Operations.DIV.getRank();
     }
-
     @Override
     protected boolean isAssociative() {
         return false;

@@ -43,6 +43,6 @@ public class Const implements CommonExpression {
 
     @Override
     public int getRank() {
-        return Integer.MAX_VALUE;
+        return Operations.CONST.getRank();
     }
 }

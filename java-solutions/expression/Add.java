@@ -7,12 +7,12 @@ public class Add extends BinaryOperation {
 
     @Override
     protected String getSymbol() {
-        return "+";
+        return Operations.ADD.getSymbol();
     }
 
     @Override
     public int getRank() {
-        return 0;
+        return Operations.ADD.getRank();
     }
 
     @Override

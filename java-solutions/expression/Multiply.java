@@ -7,12 +7,12 @@ public class Multiply extends BinaryOperation {
 
     @Override
     protected String getSymbol() {
-        return "*";
+        return Operations.MUL.getSymbol();
     }
 
     @Override
     public int getRank() {
-        return 1;
+        return Operations.MUL.getRank();
     }
 
     @Override

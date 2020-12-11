@@ -1,7 +1,16 @@
 package expression;
 
+import expression.parser.ExpressionParser;
+
 public class Main {
     public static void main(String[] args) {
+        ExpressionParser parse = new ExpressionParser();
+
+
+        TripleExpression ex = parse.parse("-2147483648");
+
+        System.out.println(ex.toMiniString());
+
         System.out.println(new Multiply(new Const(5), new Divide(new Const(3), new Const(1))).toMiniString());
         System.out.println(new Add(new Const(5), new Subtract(new Const(3), new Const(1))).toMiniString());
         System.out.println(new Subtract(new Const(5), new Subtract(new Const(3), new Const(1))).toMiniString());

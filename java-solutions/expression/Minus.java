@@ -17,6 +17,6 @@ public class Minus extends UnaryOperation {
 
     @Override
     protected String getSymbol() {
-        return "-";
+        return Operations.MINUS.getSymbol();
     }
 }

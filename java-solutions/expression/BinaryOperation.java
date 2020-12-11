@@ -2,11 +2,12 @@ package expression;
 
 import java.util.Objects;
 
-public abstract class BinaryOperation extends Operation {
+public abstract class BinaryOperation implements CommonExpression {
     protected final CommonExpression left, right;
 
     protected abstract boolean isAssociative();
     protected abstract boolean isContinuous();
+    protected abstract String getSymbol();
     protected abstract int operate(int left, int right);
     protected abstract double operate(double left, double right);
 
@@ -22,7 +23,8 @@ public abstract class BinaryOperation extends Operation {
 
     @Override
     public int evaluate(int x, int y, int z) {
-        return operate(left.evaluate(x, y, z), right.evaluate(x, y, z));
+        int t1 = left.evaluate(x, y, z), t2 = right.evaluate(x, y, z);
+        return operate(t1, t2);
     }
 
     @Override

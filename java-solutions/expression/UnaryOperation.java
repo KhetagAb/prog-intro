@@ -2,9 +2,10 @@ package expression;
 
 import java.util.Objects;
 
-public abstract class UnaryOperation extends Operation {
+public abstract class UnaryOperation implements CommonExpression {
     protected final CommonExpression expression;
 
+    protected abstract String getSymbol();
     protected abstract int operate(int value);
     protected abstract double operate(double value);
 
@@ -14,7 +15,7 @@ public abstract class UnaryOperation extends Operation {
 
     @Override
     public int getRank() {
-        return Integer.MAX_VALUE;
+        return Operations.MINUS.getRank();
     }
 
     @Override
@@ -29,7 +30,8 @@ public abstract class UnaryOperation extends Operation {
 
     @Override
     public int evaluate(int x, int y, int z) {
-        return operate(expression.evaluate(x, y, z));
+        int t = expression.evaluate(x, y, z);
+        return operate(t);
     }
 
     @Override
