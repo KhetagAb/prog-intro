@@ -64,6 +64,7 @@ public class ExpressionParser extends BaseParser implements Parser {
             CommonExpression parsed = parseExpression();
             skipWhitespace();
             expect(')');
+
             return parsed;
         } else if (test('-')) {
             skipWhitespace();
@@ -74,12 +75,10 @@ public class ExpressionParser extends BaseParser implements Parser {
             }
         } else if (testForward("flip")) {
             expect("flip");
-            skipWhitespace();
 
             return new Flip(parseValue());
         } else if (testForward("low")) {
             expect("low");
-            skipWhitespace();
 
             return new Low(parseValue());
         } else if (isDigit()) {
