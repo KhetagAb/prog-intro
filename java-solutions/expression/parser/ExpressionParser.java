@@ -26,7 +26,6 @@ public class ExpressionParser extends BaseParser implements Parser {
             skipWhitespace();
 
             final Operations current = Operations.BINARY_OPERAND.get(Character.toString(ch));
-            // toDo HM-12
             if (current == null || level != current.getRank()) {
                 return parsed;
             }
@@ -55,7 +54,6 @@ public class ExpressionParser extends BaseParser implements Parser {
                 return new Divide(left, right);
             default:
                 throw new IllegalStateException("Unreachable");
-                // toDo HM-12
         }
     }
 
@@ -101,11 +99,7 @@ public class ExpressionParser extends BaseParser implements Parser {
 
         parseInteger(sb);
 
-        try {
-            return new Const(Integer.parseInt(sb.toString()));
-        } catch (NumberFormatException e) {
-            throw new IllegalStateException("Unreachable"); // toDo hm-12
-        }
+        return new Const(Integer.parseInt(sb.toString()));
     }
 
     private CommonExpression parseVariable() {
@@ -114,10 +108,6 @@ public class ExpressionParser extends BaseParser implements Parser {
         final StringBuilder sb = new StringBuilder();
         parseString(sb);
 
-        try {
-            return new Variable(sb.toString());
-        } catch (NumberFormatException e) {
-            throw new IllegalStateException("Unreached"); // toDo HM-12
-        }
+        return new Variable(sb.toString());
     }
 }
