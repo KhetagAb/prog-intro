@@ -32,6 +32,7 @@ public class XOR extends BinaryOperation {
 
     @Override
     protected double operate(double left, double right) {
+        // :NOTE: Копипаста
         throw new UnsupportedOperationException("Double don't support XOR operation.");
     }
 }

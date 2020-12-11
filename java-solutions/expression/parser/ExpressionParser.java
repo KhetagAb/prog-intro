@@ -39,7 +39,7 @@ public class ExpressionParser extends BaseParser implements Parser {
     private CommonExpression composeExpressions(CommonExpression left, CommonExpression right, Operations operation) {
         switch (operation) {
             case OR:
-                return new Or(left, right);
+                return Operations.OR.create(left, right);
             case XOR:
                 return new XOR(left, right);
             case AND:
@@ -67,9 +67,10 @@ public class ExpressionParser extends BaseParser implements Parser {
 
             return parsed;
         } else if (test('-')) {
+            // - 123 -> -123
             skipWhitespace();
             if (isDigit()) {
-                return parseConst(false);
+                return parseConst("");
             } else {
                 return new Minus(parseValue());
             }
@@ -82,21 +83,20 @@ public class ExpressionParser extends BaseParser implements Parser {
 
             return new Low(parseValue());
         } else if (isDigit()) {
-            return parseConst(true);
+            return parseConst("-");
         } else {
             return parseVariable();
         }
     }
 
-    private CommonExpression parseConst(boolean isPositive) {
+    private CommonExpression parseConst(final String prefix) {
         skipWhitespace();
 
-        final StringBuilder sb = new StringBuilder();
-        if (!isPositive) {
-            sb.append('-');
+        final StringBuilder sb = new StringBuilder(prefix);
+        while (isDigit()) {
+            sb.append(ch);
+            nextChar();
         }
-
-        parseInteger(sb);
 
         return new Const(Integer.parseInt(sb.toString()));
     }
