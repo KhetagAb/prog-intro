@@ -1,9 +1,12 @@
 package expression;
 
-import java.util.Map;
-import java.util.function.BinaryOperator;
+public abstract class Operation implements CommonExpression {
+    public abstract String getSymbol();
+}
 
+/*
 // :NOTE: Не enum
+@Deprecated
 public enum Operations {
     OR("|", 0, Or::new),
     XOR("^", 1),
@@ -40,7 +43,7 @@ public enum Operations {
     }
 
 
-        // :NOTE: Копипаста
+    // :NOTE: Копипаста
     public static final Map<String, Operations> BINARY_OPERAND = Map.of(
             OR.symbol, OR,
             XOR.symbol, XOR,
@@ -50,4 +53,4 @@ public enum Operations {
             MUL.symbol, MUL,
             DIV.symbol, DIV
     );
-}
+} */

@@ -2,24 +2,30 @@ package expression;
 
 import java.util.function.UnaryOperator;
 
-public class Low extends IntegerUnaryOperation {
-    public Low() { super(); }
+public class Negate extends UnaryOperation {
+    public Negate() { super(); }
 
-    public Low(CommonExpression expression) {
+    public Negate(CommonExpression expression) {
         super(expression);
     }
 
     @Override
     public String getSymbol() {
-        return "low";
+        return "-";
     }
 
     @Override
     public UnaryOperator<CommonExpression> getFactory() {
-        return Low::new;
+        return Negate::new;
     }
+
     @Override
     protected int operate(int value) {
-        return Integer.lowestOneBit(value);
+        return -value;
+    }
+
+    @Override
+    protected double operate(double value) {
+        return -value;
     }
 }

@@ -1,6 +1,24 @@
 package expression;
 
-public class Flip extends UnaryOperation {
+import java.util.function.UnaryOperator;
+
+public class Flip extends IntegerUnaryOperation {
+    public Flip() { super(); };
+
+    public Flip(CommonExpression expression) {
+        super(expression);
+    }
+
+    @Override
+    public String getSymbol() {
+        return "flip";
+    }
+
+    @Override
+    public UnaryOperator<CommonExpression> getFactory() {
+        return Flip::new;
+    }
+
     @Override
     protected int operate(int value) {
         int result = 0;
@@ -12,19 +30,5 @@ public class Flip extends UnaryOperation {
         }
 
         return result;
-    }
-
-    @Override
-    protected double operate(double value) {
-        throw new UnsupportedOperationException("Double don't support FLIP operator.");
-    }
-
-    public Flip(CommonExpression expression) {
-        super(expression);
-    }
-
-    @Override
-    protected String getSymbol() {
-        return Operations.FLIP.getSymbol();
     }
 }

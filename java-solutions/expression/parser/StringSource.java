@@ -19,7 +19,11 @@ public class StringSource implements ExpressionSource {
     }
 
     public char getNext(int forward) {
-        return source.charAt(pos + forward - 1);
+        if (hasNext(forward)) {
+            return source.charAt(pos + forward - 1);
+        } else {
+            return 0;
+        }
     }
 
     public char next() {

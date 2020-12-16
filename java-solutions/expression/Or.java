@@ -1,18 +1,27 @@
 package expression;
 
-public class Or extends BinaryOperation {
+import java.util.function.BinaryOperator;
+
+public class Or extends BitwiseOperation {
+    public Or() { super(); }
+
     public Or(CommonExpression left, CommonExpression right) {
         super(left, right);
     }
 
     @Override
-    protected String getSymbol() {
-        return Operations.OR.getSymbol();
+    public int getRank() {
+        return 10000000;
     }
 
     @Override
-    public int getRank() {
-        return Operations.OR.getRank();
+    public String getSymbol() {
+        return "|";
+    }
+
+    @Override
+    public BinaryOperator<CommonExpression> getFactory() {
+        return Or::new;
     }
 
     @Override
@@ -28,10 +37,5 @@ public class Or extends BinaryOperation {
     @Override
     protected int operate(int left, int right) {
         return left | right;
-    }
-
-    @Override
-    protected double operate(double left, double right) {
-        throw new UnsupportedOperationException("Double don't support OR operation.");
     }
 }

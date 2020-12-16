@@ -1,18 +1,27 @@
 package expression;
 
+import java.util.function.BinaryOperator;
+
 public class Add extends BinaryOperation {
+    public Add() { super(); }
+
     public Add(CommonExpression left, CommonExpression right) {
         super(left, right);
     }
 
     @Override
-    protected String getSymbol() {
-        return Operations.ADD.getSymbol();
+    public int getRank() {
+        return 40000000;
     }
 
     @Override
-    public int getRank() {
-        return Operations.ADD.getRank();
+    public String getSymbol() {
+        return "+";
+    }
+
+    @Override
+    public BinaryOperator<CommonExpression> getFactory() {
+        return Add::new;
     }
 
     @Override

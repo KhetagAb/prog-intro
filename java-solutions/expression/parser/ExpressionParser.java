@@ -2,7 +2,21 @@ package expression.parser;
 
 import expression.*;
 
-public class ExpressionParser extends BaseParser implements Parser {
+import java.util.function.BinaryOperator;
+import java.util.function.UnaryOperator;
+
+public class ExpressionParser extends AbstractExpressionParser implements Parser {
+    private static final BinaryOperation[] BINARY_OPERATORS = new BinaryOperation[] {
+            new Or(), new And(), new XOR(), new Add(), new Subtract(), new Multiply(), new Divide() };
+
+    private static final UnaryOperation[] UNARY_OPERATORS = new UnaryOperation[] {
+            new Negate(), new Flip(), new Low() };
+
+
+    public ExpressionParser() {
+        super(BINARY_OPERATORS, UNARY_OPERATORS);
+    }
+
     @Override
     public TripleExpression parse(String expression) {
         setSource(new StringSource(expression));
@@ -14,46 +28,30 @@ public class ExpressionParser extends BaseParser implements Parser {
     }
 
     private CommonExpression parseLevel(int level) {
-        skipWhitespace();
-
-        if (level == Operations.CONST.getRank()) {
+        if (level == ranks.getMaxRank()) {
             return parseValue();
         }
 
-        CommonExpression parsed = parseLevel(level + 1);
+        int nextLevel = ranks.getNextRank(level);
 
+        skipWhitespace();
+        CommonExpression parsed = parseLevel(nextLevel);
+
+        // (z   )/10
         while (true) {
             skipWhitespace();
 
-            final Operations current = Operations.BINARY_OPERAND.get(Character.toString(ch));
-            if (current == null || level != current.getRank()) {
+            if (ch == ')')
+                return parsed;
+
+            String operator = parseBinaryOperator();
+            if (operator == null || level != ranks.getRank(operator)) {
                 return parsed;
             }
 
-            nextChar();
+            expect(operator);
 
-            parsed = composeExpressions(parsed, parseLevel(level + 1), current);
-        }
-    }
-
-    private CommonExpression composeExpressions(CommonExpression left, CommonExpression right, Operations operation) {
-        switch (operation) {
-            case OR:
-                return Operations.OR.create(left, right);
-            case XOR:
-                return new XOR(left, right);
-            case AND:
-                return new And(left, right);
-            case ADD:
-                return new Add(left, right);
-            case SUB:
-                return new Subtract(left, right);
-            case MUL:
-                return new Multiply(left, right);
-            case DIV:
-                return new Divide(left, right);
-            default:
-                throw new IllegalStateException("Unreachable");
+            parsed = binFactories.buildExpression(operator, parsed, parseLevel(nextLevel));
         }
     }
 
@@ -66,47 +64,69 @@ public class ExpressionParser extends BaseParser implements Parser {
             expect(')');
 
             return parsed;
-        } else if (test('-')) {
-            // - 123 -> -123
-            skipWhitespace();
+        }
+
+        if (test('-')) {
             if (isDigit()) {
-                return parseConst("");
+                return parseConst("-");
             } else {
-                return new Minus(parseValue());
+                skipWhitespace();
+                return new Negate(parseValue());
             }
-        } else if (testForward("flip")) {
-            expect("flip");
+        }
 
-            return new Flip(parseValue());
-        } else if (testForward("low")) {
-            expect("low");
+        if (isDigit()) {
+            return parseConst("");
+        }
 
-            return new Low(parseValue());
-        } else if (isDigit()) {
-            return parseConst("-");
+        UnaryOperator<CommonExpression> unary = parseUnaryOperator();
+        return (unary == null ? parseVariable() : unary.apply(parseValue()));
+    }
+
+    private String parseBinaryOperator() {
+        skipWhitespace();
+
+        if (isLetter()) {
+            return parseToken(ch -> isLetter(ch) || isDigit(ch));
         } else {
-            return parseVariable();
+            return ch == 0 ? null : Character.toString(ch);
+        }
+    }
+
+    private UnaryOperator<CommonExpression> parseUnaryOperator() {
+        skipWhitespace();
+
+        while (true) {
+            if (unFactories.check(ch) && !unFactories.isOperator()) {
+                nextChar();
+            } else {
+                break;
+            }
+        }
+
+        if (unFactories.isOperator()) {
+            nextChar();
+            return unFactories.getOperator();
+        } else {
+            return null;
         }
     }
 
     private CommonExpression parseConst(final String prefix) {
         skipWhitespace();
 
-        final StringBuilder sb = new StringBuilder(prefix);
-        while (isDigit()) {
-            sb.append(ch);
-            nextChar();
-        }
+        String token = parseToken(BaseParser::isDigit);
+        expect(token);
 
-        return new Const(Integer.parseInt(sb.toString()));
+        return new Const(Integer.parseInt(prefix + token));
     }
 
     private CommonExpression parseVariable() {
         skipWhitespace();
 
-        final StringBuilder sb = new StringBuilder();
-        parseString(sb);
+        String token = parseToken(BaseParser::isLetter);
+        expect(token);
 
-        return new Variable(sb.toString());
+        return new Variable(token);
     }
 }

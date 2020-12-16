@@ -2,14 +2,17 @@ package expression;
 
 import java.util.Objects;
 
-public abstract class BinaryOperation implements CommonExpression {
+public abstract class BinaryOperation extends Operation implements BinaryFactory {
     protected final CommonExpression left, right;
 
     protected abstract boolean isAssociative();
     protected abstract boolean isContinuous();
-    protected abstract String getSymbol();
     protected abstract int operate(int left, int right);
     protected abstract double operate(double left, double right);
+
+    public BinaryOperation() {
+        this(null, null);
+    }
 
     protected BinaryOperation(CommonExpression left, CommonExpression right) {
         this.left = left;
@@ -23,8 +26,7 @@ public abstract class BinaryOperation implements CommonExpression {
 
     @Override
     public int evaluate(int x, int y, int z) {
-        int t1 = left.evaluate(x, y, z), t2 = right.evaluate(x, y, z);
-        return operate(t1, t2);
+        return operate(left.evaluate(x, y, z), right.evaluate(x, y, z));
     }
 
     @Override
@@ -37,6 +39,8 @@ public abstract class BinaryOperation implements CommonExpression {
         if (ex.getRank() < getRank() || ex.getRank() == getRank() && isBinBrackets) {
             return "(" + ex.toMiniString() + ")";
         }
+
+        // 1 + (2 - 3) -> 1 + 2 - 3
 
         return ex.toMiniString();
     }

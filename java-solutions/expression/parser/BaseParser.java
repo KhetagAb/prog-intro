@@ -1,10 +1,11 @@
 package expression.parser;
 
 import java.util.InputMismatchException;
+import java.util.function.Predicate;
 
 public abstract class BaseParser {
     private ExpressionSource source;
-    protected char ch;
+    protected char ch = '\0';
 
     protected void setSource(final ExpressionSource source) {
         this.source = source;
@@ -24,7 +25,17 @@ public abstract class BaseParser {
         return false;
     }
 
-    protected boolean testForward(final String expected) {
+    protected boolean test(Predicate<Character> tokenChecker) {
+        if (tokenChecker.test(ch)) {
+            nextChar();
+            return true;
+        }
+
+        return false;
+    }
+
+    @Deprecated
+    protected boolean checkForward(final String expected) {
         for (int i = 0; i < expected.length(); i++) {
             if (!source.hasNext(i) || source.getNext(i) != expected.charAt(i)) {
                 return false;
@@ -55,31 +66,39 @@ public abstract class BaseParser {
         }
     }
 
-    protected void parseInteger(final StringBuilder sb) {
-        while (isDigit()) {
-            sb.append(ch);
-            nextChar();
-        }
-    }
+    protected String parseToken(Predicate<Character> tokenChecker) {
+        final StringBuilder sb = new StringBuilder();
 
-    protected void parseString(final StringBuilder sb) {
-        while (isLetter()) {
-            sb.append(ch);
-            nextChar();
+        while (tokenChecker.test(source.getNext(sb.length())) && ch != 0) {
+            sb.append(source.getNext(sb.length()));
         }
+
+        return sb.toString();
     }
 
     protected boolean isDigit() {
-        return '0' <= ch && ch <= '9';
+        return isDigit(ch);
     }
 
     protected boolean isLetter() {
+        return isLetter(ch);
+    }
+
+    protected static boolean isDigit(char ch) {
+        return '0' <= ch && ch <= '9';
+    }
+
+    protected static boolean isLetter(char ch) {
         return Character.isLetter(ch);
     }
 
+    protected static boolean isWhiteSpace(char ch) {
+        return ch == ' ' || ch == '\r' || ch == '\n' || ch == '\t';
+    }
+
     protected void skipWhitespace() {
-        while (test(' ') || test('\r') || test('\n') || test('\t')) {
-            // Empty body...
+        while (test(BaseParser::isWhiteSpace)) {
+            // Empty body
         }
     }
 }

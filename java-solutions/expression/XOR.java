@@ -1,18 +1,27 @@
 package expression;
 
-public class XOR extends BinaryOperation {
+import java.util.function.BinaryOperator;
+
+public class XOR extends BitwiseOperation {
+    public XOR() { super(); }
+
     public XOR(CommonExpression left, CommonExpression right) {
         super(left, right);
     }
 
     @Override
-    protected String getSymbol() {
-        return Operations.XOR.getSymbol();
+    public int getRank() {
+        return 20000000;
     }
 
     @Override
-    public int getRank() {
-        return Operations.XOR.getRank();
+    public String getSymbol() {
+        return "^";
+    }
+
+    @Override
+    public BinaryOperator<CommonExpression> getFactory() {
+        return XOR::new;
     }
 
     @Override
@@ -28,11 +37,5 @@ public class XOR extends BinaryOperation {
     @Override
     protected int operate(int left, int right) {
         return left ^ right;
-    }
-
-    @Override
-    protected double operate(double left, double right) {
-        // :NOTE: Копипаста
-        throw new UnsupportedOperationException("Double don't support XOR operation.");
     }
 }

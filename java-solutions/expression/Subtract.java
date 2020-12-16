@@ -1,19 +1,29 @@
 package expression;
 
+import java.util.function.BinaryOperator;
+
 public class Subtract extends BinaryOperation {
+    public Subtract() { super(); }
+
     public Subtract(CommonExpression left, CommonExpression right) {
         super(left, right);
     }
 
     @Override
-    protected String getSymbol() {
-        return Operations.SUB.getSymbol();
+    public int getRank() {
+        return 40000000;
     }
 
     @Override
-    public int getRank() {
-        return Operations.SUB.getRank();
+    public String getSymbol() {
+        return "-";
     }
+
+    @Override
+    public BinaryOperator<CommonExpression> getFactory() {
+        return Subtract::new;
+    }
+
     @Override
     protected boolean isAssociative() {
         return false;

@@ -1,19 +1,29 @@
 package expression;
 
+import java.util.function.BinaryOperator;
+
 public class Divide extends BinaryOperation {
+    public Divide() { super(); }
+
     public Divide(CommonExpression left, CommonExpression right) {
         super(left, right);
     }
 
     @Override
-    protected String getSymbol() {
-        return Operations.DIV.getSymbol();
+    public int getRank() {
+        return 50000000;
     }
 
     @Override
-    public int getRank() {
-        return Operations.DIV.getRank();
+    public String getSymbol() {
+        return "/";
     }
+
+    @Override
+    public BinaryOperator<CommonExpression> getFactory() {
+        return Divide::new;
+    }
+
     @Override
     protected boolean isAssociative() {
         return false;

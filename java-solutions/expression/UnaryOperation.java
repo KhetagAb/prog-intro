@@ -2,12 +2,13 @@ package expression;
 
 import java.util.Objects;
 
-public abstract class UnaryOperation implements CommonExpression {
+public abstract class UnaryOperation extends Operation implements UnaryFactory {
     protected final CommonExpression expression;
 
-    protected abstract String getSymbol();
     protected abstract int operate(int value);
     protected abstract double operate(double value);
+
+    protected UnaryOperation() { this(null); }
 
     protected UnaryOperation(CommonExpression expression) {
         this.expression = expression;
@@ -15,7 +16,7 @@ public abstract class UnaryOperation implements CommonExpression {
 
     @Override
     public int getRank() {
-        return Operations.MINUS.getRank();
+        return Integer.MAX_VALUE;
     }
 
     @Override
@@ -37,7 +38,7 @@ public abstract class UnaryOperation implements CommonExpression {
     @Override
     public String toMiniString() {
         if (expression instanceof BinaryOperation) {
-            return getSymbol() + " (" + expression.toMiniString() + ")";
+            return getSymbol() + "(" + expression.toMiniString() + ")";
         } else {
             return getSymbol() + expression.toMiniString();
         }

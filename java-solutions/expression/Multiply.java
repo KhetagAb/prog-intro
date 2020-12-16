@@ -1,18 +1,27 @@
 package expression;
 
+import java.util.function.BinaryOperator;
+
 public class Multiply extends BinaryOperation {
+    public Multiply() { super(); }
+
     public Multiply(CommonExpression left, CommonExpression right) {
         super(left, right);
     }
 
     @Override
-    protected String getSymbol() {
-        return Operations.MUL.getSymbol();
+    public int getRank() {
+        return 50000000;
     }
 
     @Override
-    public int getRank() {
-        return Operations.MUL.getRank();
+    public String getSymbol() {
+        return "*";
+    }
+
+    @Override
+    public BinaryOperator<CommonExpression> getFactory() {
+        return Multiply::new;
     }
 
     @Override
