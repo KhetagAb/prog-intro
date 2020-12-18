@@ -8,9 +8,12 @@ import java.util.function.UnaryOperator;
 
 public class ExpressionParser extends AbstractExpressionParser implements Parser {
     private static final List<List<BinaryOperation>> BINARY_OPERATORS = List.of(
-            List.of(new Or(0, 0)), List.of(new XOR(0, 0)), List.of(new And(0, 0)),
+            List.of(new Or(null, null)),
+            List.of(new XOR(0, 0)),
+            List.of(new And(0, 0)),
             List.of(new Add(0, 0), new Subtract(0, 0)),
-            List.of(new Multiply(0, 0), new Divide(0, 0)));
+            List.of(new Multiply(0, 0), new Divide(0, 0))
+    );
 
     private static final UnaryOperation[] UNARY_OPERATORS = new UnaryOperation[] {
             new Negate(0), new Flip(0), new Low(0) };
