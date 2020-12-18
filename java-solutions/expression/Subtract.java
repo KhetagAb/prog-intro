@@ -3,8 +3,6 @@ package expression;
 import java.util.function.BinaryOperator;
 
 public class Subtract extends BinaryOperation {
-    public Subtract(int left, int right) { super(left, right); }
-
     public Subtract(CommonExpression left, CommonExpression right) {
         super(left, right);
     }

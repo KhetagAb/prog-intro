@@ -8,10 +8,6 @@ public abstract class UnaryOperation extends Operation implements UnaryFactory {
     protected abstract int operate(int value);
     protected abstract double operate(double value);
 
-    protected UnaryOperation(int value) {
-        this(new Const(value));
-    }
-
     protected UnaryOperation(CommonExpression expression) {
         this.expression = expression;
     }

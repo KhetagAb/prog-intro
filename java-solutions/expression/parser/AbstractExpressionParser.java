@@ -1,8 +1,6 @@
 package expression.parser;
 
-import expression.BinaryOperation;
-import expression.CommonExpression;
-import expression.UnaryOperation;
+import expression.*;
 
 import java.util.*;
 import java.util.function.BinaryOperator;
@@ -10,43 +8,167 @@ import java.util.function.UnaryOperator;
 
 public abstract class AbstractExpressionParser extends BaseParser {
     protected final OperatorsRank ranks;
-    protected final UnaryOperators unFactories;
-    protected final BinaryOperators binFactories;
+    protected final PrefixTreeOperator unaries;
+    protected final PrefixTreeOperator binaries;
+    private final Map<String, BinaryOperator<CommonExpression>> binaryFactories = new HashMap<>();
+    private final Map<String, UnaryOperator<CommonExpression>> unaryFactories = new HashMap<>();
 
-    protected AbstractExpressionParser(final List<List<BinaryOperation>> binOperations, final UnaryOperation[] unOperations) {
+    protected AbstractExpressionParser(final List<List<Pair>> binOperations, final UnaryOperation[] unOperations) {
         this.ranks = new OperatorsRank();
-        this.binFactories = new BinaryOperators();
-        this.unFactories = new UnaryOperators();
+        this.unaries = new PrefixTreeOperator();
+        this.binaries = new PrefixTreeOperator();
 
-        for (List<BinaryOperation> bins: binOperations) {
+        for (List<Pair> bins: binOperations) {
             ranks.addLevel(bins);
-            for (BinaryOperation bin : bins) {
-                binFactories.factories.put(bin.getSymbol(), bin.getFactory());
+            for (Pair bin : bins) {
+                binaries.put(bin.getKey());
+                binaryFactories.put(bin.getKey(), bin.getValue());
             }
         }
 
         for (UnaryOperation un: unOperations) {
-            unFactories.factories.put(un.getSymbol(), un.getFactory());
+            unaries.put(un.getSymbol());
+            unaryFactories.put(un.getSymbol(), un.getFactory());
         }
+    }
+
+    protected CommonExpression parseExpression() {
+        return parseLevel(0);
+    }
+
+    protected CommonExpression parseLevel(int level) {
+        if (level == ranks.getMaxRank()) {
+            return parseValue();
+        }
+
+        skipWhitespace();
+        int nextLevel = ranks.getNextRank(level);
+
+        CommonExpression parsed = parseLevel(nextLevel);
+        String operator = parseBinaryOperator(level);
+        while (operator != null) {
+            parsed = buildBinOperator(operator, parsed, parseLevel(nextLevel));
+            operator = parseBinaryOperator(level);
+        }
+
+        return parsed;
+    }
+
+    protected CommonExpression buildBinOperator(String operator, CommonExpression left, CommonExpression right) {
+        return getBinOperator(operator).apply(left, right);
+    }
+
+    protected CommonExpression buildUnOperator(String operator, CommonExpression expression) {
+        return getUnOperator(operator).apply(expression);
+    }
+
+    protected CommonExpression parseValue() {
+        skipWhitespace();
+
+        if (test('(')) {
+            CommonExpression parsed = parseExpression();
+            skipWhitespace();
+            expect(')');
+
+            return parsed;
+        }
+
+        if (test('-')) {
+            if (isDigit()) {
+                return parseConst("-");
+            } else {
+                skipWhitespace();
+                return new Negate(parseValue());
+            }
+        }
+
+        if (isDigit()) {
+            return parseConst("");
+        }
+
+        String operator = parseUnaryOperator();
+        return operator == null ? parseVariable() : buildUnOperator(operator, parseValue());
+    }
+
+    protected String parseBinaryOperator(int level) {
+        skipWhitespace();
+
+        int pos = 0;
+        char current;
+        do {
+            current = forwardChar(pos++);
+        } while (binaries.check(current) && !binaries.isOperator());
+
+        String operator = binaries.getOperator();
+        if (operator == null || ranks.getRank(operator) != level) {
+            return null;
+        } else {
+            expect(operator);
+            return operator;
+        }
+    }
+
+    protected String parseUnaryOperator() {
+        skipWhitespace();
+
+        boolean isWordType = true;
+
+        int pos = 0;
+        char current;
+        do {
+            current = forwardChar(pos++);
+
+            if (!isDigit(current) && !isLetter(current)) {
+                isWordType = false;
+            }
+
+        } while (unaries.check(current) && !unaries.isOperator());
+
+        String operator = null;
+        if (unaries.isOperator()) {
+            if (isWordType) {
+                char next = forwardChar(pos);
+
+                if (!isDigit(next) && !isLetter(next)) {
+                    operator = unaries.getOperator();
+                }
+            } else {
+                operator = unaries.getOperator();
+            }
+        } else {
+            return null;
+        }
+
+        if (operator != null) {
+            expect(operator);
+        }
+
+        return operator;
+    }
+
+    protected CommonExpression parseConst(final String prefix) {
+        skipWhitespace();
+        return new Const(Integer.parseInt(prefix + parseToken(BaseParser::isDigit)));
+    }
+
+    protected CommonExpression parseVariable() {
+        skipWhitespace();
+        return new Variable(parseToken(BaseParser::isLetter));
     }
 
     protected class OperatorsRank {
         private int level = 0;
         private final Map<String, Integer> operatorToRank = new HashMap<>();
 
-        private void addLevel(List<BinaryOperation> bins) {
-            for (BinaryOperation bin : bins) {
-                ranks.operatorToRank.put(bin.getSymbol(), level);
+        private void addLevel(List<Pair> bins) {
+            for (Pair bin : bins) {
+                ranks.operatorToRank.put(bin.getKey(), level);
             }
             level++;
         }
 
         protected int getRank(String operator) {
-            if (operatorToRank.containsKey(operator)) {
-                return operatorToRank.get(operator);
-            }
-
-            throw new IllegalStateException("Unknown operator");
+            return operatorToRank.get(operator);
         }
 
         protected int getNextRank(int rank) {
@@ -58,25 +180,77 @@ public abstract class AbstractExpressionParser extends BaseParser {
         }
     }
 
-    // Map: Operator name -> Operator factory
-    protected class BinaryOperators {
-        private final Map<String, BinaryOperator<CommonExpression>> factories = new HashMap<>();
-
-        protected BinaryOperator<CommonExpression> getOperator(String operator) {
-            return factories.get(operator);
-        }
+    protected boolean isBinOperator(String operator) {
+        return binaryFactories.containsKey(operator);
     }
 
-    // Map: Operator name -> Operator factory
-    protected class UnaryOperators {
-        private final Map<String, UnaryOperator<CommonExpression>> factories = new HashMap<>();
+    protected BinaryOperator<CommonExpression> getBinOperator(String operator) {
+        return binaryFactories.get(operator);
+    }
 
-        protected UnaryOperator<CommonExpression> getOperator(String operator) {
-            return factories.get(operator);
+    protected UnaryOperator<CommonExpression> getUnOperator(String operator) {
+        return unaryFactories.get(operator);
+    }
+
+    // Prefix tree: Operator name -> Operator factory
+    protected static class PrefixTreeOperator {
+        public PrefixTreeOperator() {
+            this.root = new Node();
+            this.pos = this.root;
+            this.sb = new StringBuilder();
+        }
+
+        private final Node root;
+        private Node pos;
+        private StringBuilder sb;
+
+        public void put(String str) {
+            Node v = root;
+
+            for (char ch: str.toCharArray()) {
+                v.nodes.putIfAbsent(ch, new Node());
+                v = v.nodes.get(ch);
+            }
+
+            v.isOperator = true;
+        }
+
+        public boolean check(char ch) {
+            if (pos.nodes.containsKey(ch)) {
+                pos = pos.nodes.get(ch);
+                sb.append(ch);
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public boolean isOperator() {
+            return pos.isOperator;
+        }
+
+        public String getOperator() {
+            if (!isOperator()) {
+                return null;
+            }
+
+            String operator = sb.toString();
+            toStart();
+
+            return operator;
+        }
+
+        public void toStart() {
+            pos = root;
+            sb.setLength(0);
+        }
+
+        private class Node {
+            private final Map<Character, Node> nodes = new HashMap<>();
+            private boolean isOperator = false;
         }
     }
 }
-
 
 /*
 // :NOTE: Не enum

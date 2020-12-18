@@ -3,10 +3,6 @@ package expression;
 import java.util.function.BinaryOperator;
 
 public class Multiply extends BinaryOperation {
-    public Multiply(int left, int right) {
-        super(left, right);
-    }
-
     public Multiply(CommonExpression left, CommonExpression right) {
         super(left, right);
     }

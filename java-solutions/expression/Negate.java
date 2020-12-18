@@ -3,10 +3,6 @@ package expression;
 import java.util.function.UnaryOperator;
 
 public class Negate extends UnaryOperation {
-    public Negate(int value) {
-        super(value);
-    }
-
     public Negate(CommonExpression expression) {
         super(expression);
     }

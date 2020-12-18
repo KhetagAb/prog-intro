@@ -3,10 +3,6 @@ package expression;
 import java.util.function.BinaryOperator;
 
 public class Add extends BinaryOperation {
-    public Add(int left, int right) {
-        super(left, right);
-    }
-
     public Add(CommonExpression left, CommonExpression right) {
         super(left, right);
     }

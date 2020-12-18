@@ -1,10 +1,6 @@
 package expression;
 
 public abstract class BitwiseOperation extends BinaryOperation {
-    protected BitwiseOperation(int left, int right) {
-        super(left, right);
-    }
-
     protected BitwiseOperation(CommonExpression left, CommonExpression right) {
         super(left, right);
     }

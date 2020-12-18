@@ -10,10 +10,6 @@ public abstract class BinaryOperation extends Operation implements BinaryFactory
     protected abstract int operate(int left, int right);
     protected abstract double operate(double left, double right);
 
-    public BinaryOperation(int left, int right) {
-        this(new Const(left), new Const(right));
-    }
-
     protected BinaryOperation(CommonExpression left, CommonExpression right) {
         this.left = left;
         this.right = right;

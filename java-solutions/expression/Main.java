@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         ExpressionParser parser = new ExpressionParser();
 
-        System.out.println(parser.parse("flip-fliped + fli + 12345").toMiniString());
+        System.out.println(parser.parse("10").toMiniString());
     }
 }
 

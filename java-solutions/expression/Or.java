@@ -3,10 +3,6 @@ package expression;
 import java.util.function.BinaryOperator;
 
 public class Or extends BitwiseOperation {
-    public Or(int left, int right) {
-        super(left, right);
-    }
-
     public Or(CommonExpression left, CommonExpression right) {
         super(left, right);
     }

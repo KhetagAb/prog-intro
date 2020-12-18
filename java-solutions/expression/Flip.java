@@ -3,10 +3,6 @@ package expression;
 import java.util.function.UnaryOperator;
 
 public class Flip extends IntegerUnaryOperation {
-    public Flip(int value) {
-        super(value);
-    }
-
     public Flip(CommonExpression expression) {
         super(expression);
     }
