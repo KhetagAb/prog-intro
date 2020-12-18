@@ -26,7 +26,7 @@ public abstract class AbstractExpressionParser extends BaseParser {
         }
 
         for (UnaryOperation un: unOperations) {
-            unFactories.put(un.getSymbol(), un.getFactory());
+            unFactories.factories.put(un.getSymbol(), un.getFactory());
         }
     }
 
@@ -42,13 +42,11 @@ public abstract class AbstractExpressionParser extends BaseParser {
         }
 
         protected int getRank(String operator) {
-            Integer rank = operatorToRank.get(operator);
-
-            if (rank != null) {
-                return rank;
-            } else {
-                throw new IllegalStateException("Unknown operator");
+            if (operatorToRank.containsKey(operator)) {
+                return operatorToRank.get(operator);
             }
+
+            throw new IllegalStateException("Unknown operator");
         }
 
         protected int getNextRank(int rank) {
@@ -69,89 +67,12 @@ public abstract class AbstractExpressionParser extends BaseParser {
         }
     }
 
-    // Prefix tree: Operator name -> Operator factory
+    // Map: Operator name -> Operator factory
     protected class UnaryOperators {
-        public UnaryOperators() {
-            this.root = new Node();
-            this.pos = this.root;
-        }
+        private final Map<String, UnaryOperator<CommonExpression>> factories = new HashMap<>();
 
-        private final Node root;
-        private Node pos;
-
-        public void put(String str, UnaryOperator<CommonExpression> factory) {
-            Node v = root;
-
-            for (char ch: str.toCharArray()) {
-                if (!v.isNodeTo(ch)) {
-                    v.setNode(ch, new Node());
-                }
-
-                v = v.getNode(ch);
-            }
-
-            v.factory = factory;
-        }
-
-        public boolean check(char ch) {
-            if (pos.isNodeTo(ch)) {
-                pos = pos.getNode(ch);
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        public boolean isOperator() {
-            return pos.factory != null;
-        }
-
-        public UnaryOperator<CommonExpression> getOperator() {
-            if (isOperator()) {
-                UnaryOperator<CommonExpression> operator = pos.factory;
-                toStart();
-
-                return operator;
-            }
-
-            throw new IllegalStateException("Unknown operator");
-        }
-
-        public void toStart() {
-            pos = root;
-        }
-
-        private class Node {
-            // from U+0021 to U+007E
-            private final char from = '!';
-            private final char to = '~';
-
-            private final Node[] nodes = new Node[to - from + 1];
-            private UnaryOperator<CommonExpression> factory = null;
-
-            private Node getNode(char ch) {
-                checkInRange(ch);
-                return nodes[ch - from];
-            }
-
-            private void setNode(char ch, Node node) {
-                checkInRange(ch);
-                nodes[ch - from] = node;
-            }
-
-            private boolean isNodeTo(char ch) {
-                return isInRange(ch) && nodes[ch - from] != null;
-            }
-
-            private boolean isInRange(char ch) {
-                return (from <= ch && ch <= to);
-            }
-
-            private void checkInRange(char ch) {
-                if (!isInRange(ch)) {
-                    throw new IllegalStateException("Invalid operators symbols");
-                }
-            }
+        protected UnaryOperator<CommonExpression> getOperator(String operator) {
+            return factories.get(operator);
         }
     }
 }

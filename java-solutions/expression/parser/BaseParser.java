@@ -16,6 +16,10 @@ public abstract class BaseParser {
         ch = source.hasNext() ? source.next() : '\0';
     }
 
+    protected char forwardChar(int forward) {
+        return source.hasNext(forward) ? source.getNext(forward) : '\0';
+    }
+
     protected boolean test(final char expected) {
         if (ch == expected) {
             nextChar();
@@ -25,7 +29,16 @@ public abstract class BaseParser {
         return false;
     }
 
-    protected String parseToken(Predicate<Character> tokenChecker) {
+    protected boolean test(final Predicate<Character> tokenChecker) {
+        if (tokenChecker.test(ch)) {
+            nextChar();
+            return true;
+        }
+
+        return false;
+    }
+
+    protected String parseToken(final Predicate<Character> tokenChecker) {
         final StringBuilder sb = new StringBuilder();
 
         while (ch != 0 && tokenChecker.test(ch)) {
@@ -36,11 +49,13 @@ public abstract class BaseParser {
         return sb.length() == 0 ? null : sb.toString();
     }
 
-    protected String checkToken(Predicate<Character> tokenChecker) {
+    protected String checkToken(final Predicate<Character> tokenChecker) {
         final StringBuilder sb = new StringBuilder();
 
-        while (ch != 0 && tokenChecker.test(source.getNext(sb.length())) && ch != 0) {
-            sb.append(source.getNext(sb.length()));
+        char cur = forwardChar(sb.length());
+        while (ch != 0 && tokenChecker.test(cur)) {
+            sb.append(cur);
+            cur = forwardChar(sb.length());
         }
 
         return sb.length() == 0 ? null : sb.toString();
@@ -76,16 +91,20 @@ public abstract class BaseParser {
     }
 
     protected void skipWhitespace() {
-        while (test(' ') || test('\r') || test('\n') || test('\t')) {
+        while (test(BaseParser::isWhiteSpace)) {
             // Empty body
         }
     }
 
-    protected static boolean isDigit(char ch) {
+    protected static boolean isDigit(final char ch) {
         return '0' <= ch && ch <= '9';
     }
 
-    protected static boolean isLetter(char ch) {
+    protected static boolean isLetter(final char ch) {
         return Character.isLetter(ch);
+    }
+
+    protected static boolean isWhiteSpace(final char ch) {
+        return ch == ' ' || ch == '\r' || ch == '\n' || ch == '\t';
     }
 }

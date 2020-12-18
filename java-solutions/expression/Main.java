@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         ExpressionParser parser = new ExpressionParser();
 
-        System.out.println(parser.parse("lo + 3").toString());
+        System.out.println(parser.parse("flip-fliped + fli + 12345").toMiniString());
     }
 }
 
@@ -16,4 +16,3 @@ flip – число с переставленными двоичными циф�
 low – минимальный установленный бит (как в lowestOneBit), low 123456 равно 64.
 
  */
-// 5 ^ ((-(4 & x)) - 1)

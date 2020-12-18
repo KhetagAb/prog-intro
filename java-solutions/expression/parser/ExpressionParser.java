@@ -103,22 +103,36 @@ public class ExpressionParser extends AbstractExpressionParser implements Parser
     private UnaryOperator<CommonExpression> parseUnaryOperator() {
         skipWhitespace();
 
-        // toDo Fix "((low ed) * 123456)"
-        // toDo Fix "l * 12345" -> " * 12345"
-        while (true) {
-            if (unFactories.check(ch) && !unFactories.isOperator()) {
-                nextChar();
-            } else {
-                break;
+        StringBuilder prefix = new StringBuilder();
+        boolean isWordType = true;
+
+        char current = forwardChar(prefix.length());
+        while (current != '(' && current != 0 && !isWhiteSpace(current)) {
+            if (!isDigit(current) && !isLetter(current)) {
+                isWordType = false;
             }
+
+            prefix.append(current);
+
+            String operator = prefix.toString();
+            UnaryOperator<CommonExpression> unary = unFactories.getOperator(operator);
+            if (unary != null) {
+                if (isWordType) {
+                    char next = forwardChar(prefix.length());
+                    if (!isDigit(next) && !isLetter(next)) {
+                        expect(operator);
+                        return unary;
+                    }
+                } else {
+                    expect(operator);
+                    return unary;
+                }
+            }
+
+            current = forwardChar(prefix.length());
         }
 
-        if (unFactories.isOperator()) {
-            nextChar();
-            return unFactories.getOperator();
-        } else {
-            return null;
-        }
+        return null;
     }
 
     private CommonExpression parseConst(final String prefix) {
