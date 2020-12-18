@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 
 public abstract class BaseParser {
     private ExpressionSource source;
-    protected char ch = '\0';
+    protected char ch;
 
     protected void setSource(final ExpressionSource source) {
         this.source = source;
@@ -25,24 +25,25 @@ public abstract class BaseParser {
         return false;
     }
 
-    protected boolean test(Predicate<Character> tokenChecker) {
-        if (tokenChecker.test(ch)) {
+    protected String parseToken(Predicate<Character> tokenChecker) {
+        final StringBuilder sb = new StringBuilder();
+
+        while (ch != 0 && tokenChecker.test(ch)) {
+            sb.append(ch);
             nextChar();
-            return true;
         }
 
-        return false;
+        return sb.length() == 0 ? null : sb.toString();
     }
 
-    @Deprecated
-    protected boolean checkForward(final String expected) {
-        for (int i = 0; i < expected.length(); i++) {
-            if (!source.hasNext(i) || source.getNext(i) != expected.charAt(i)) {
-                return false;
-            }
+    protected String checkToken(Predicate<Character> tokenChecker) {
+        final StringBuilder sb = new StringBuilder();
+
+        while (ch != 0 && tokenChecker.test(source.getNext(sb.length())) && ch != 0) {
+            sb.append(source.getNext(sb.length()));
         }
 
-        return true;
+        return sb.length() == 0 ? null : sb.toString();
     }
 
     protected void expect(final char expected) {
@@ -66,16 +67,6 @@ public abstract class BaseParser {
         }
     }
 
-    protected String parseToken(Predicate<Character> tokenChecker) {
-        final StringBuilder sb = new StringBuilder();
-
-        while (tokenChecker.test(source.getNext(sb.length())) && ch != 0) {
-            sb.append(source.getNext(sb.length()));
-        }
-
-        return sb.toString();
-    }
-
     protected boolean isDigit() {
         return isDigit(ch);
     }
@@ -84,21 +75,17 @@ public abstract class BaseParser {
         return isLetter(ch);
     }
 
+    protected void skipWhitespace() {
+        while (test(' ') || test('\r') || test('\n') || test('\t')) {
+            // Empty body
+        }
+    }
+
     protected static boolean isDigit(char ch) {
         return '0' <= ch && ch <= '9';
     }
 
     protected static boolean isLetter(char ch) {
         return Character.isLetter(ch);
-    }
-
-    protected static boolean isWhiteSpace(char ch) {
-        return ch == ' ' || ch == '\r' || ch == '\n' || ch == '\t';
-    }
-
-    protected void skipWhitespace() {
-        while (test(BaseParser::isWhiteSpace)) {
-            // Empty body
-        }
     }
 }

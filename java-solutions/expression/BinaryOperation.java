@@ -10,8 +10,8 @@ public abstract class BinaryOperation extends Operation implements BinaryFactory
     protected abstract int operate(int left, int right);
     protected abstract double operate(double left, double right);
 
-    public BinaryOperation() {
-        this(null, null);
+    public BinaryOperation(int left, int right) {
+        this(new Const(left), new Const(right));
     }
 
     protected BinaryOperation(CommonExpression left, CommonExpression right) {
@@ -21,17 +21,21 @@ public abstract class BinaryOperation extends Operation implements BinaryFactory
 
     @Override
     public int evaluate(int x) {
-        return operate(left.evaluate(x), right.evaluate(x));
+        return isNull() ? 0 : operate(left.evaluate(x), right.evaluate(x));
     }
 
     @Override
     public int evaluate(int x, int y, int z) {
-        return operate(left.evaluate(x, y, z), right.evaluate(x, y, z));
+        return isNull() ? 0 : operate(left.evaluate(x, y, z), right.evaluate(x, y, z));
     }
 
     @Override
     public double evaluate(double x) {
-        return operate(left.evaluate(x), right.evaluate(x));
+        return isNull() ? 0 : operate(left.evaluate(x), right.evaluate(x));
+    }
+
+    private boolean isNull() {
+        return left == null || right == null;
     }
 
     private String getMinExpression(final CommonExpression ex, boolean isRight) {

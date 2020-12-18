@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         ExpressionParser parser = new ExpressionParser();
 
-        parser.parse("low 123456");
+        System.out.println(parser.parse("lo + 3").toString());
     }
 }
 

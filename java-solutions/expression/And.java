@@ -3,7 +3,9 @@ package expression;
 import java.util.function.BinaryOperator;
 
 public class And extends BitwiseOperation {
-    public And() { super(); }
+    public And(int left, int right) {
+        super(left, right);
+    }
 
     public And(CommonExpression left, CommonExpression right) {
         super(left, right);

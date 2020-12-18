@@ -3,7 +3,9 @@ package expression;
 import java.util.function.BinaryOperator;
 
 public class Divide extends BinaryOperation {
-    public Divide() { super(); }
+    public Divide(int left, int right) {
+        super(left, right);
+    }
 
     public Divide(CommonExpression left, CommonExpression right) {
         super(left, right);

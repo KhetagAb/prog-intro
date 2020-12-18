@@ -8,7 +8,9 @@ public abstract class UnaryOperation extends Operation implements UnaryFactory {
     protected abstract int operate(int value);
     protected abstract double operate(double value);
 
-    protected UnaryOperation() { this(null); }
+    protected UnaryOperation(int value) {
+        this(new Const(value));
+    }
 
     protected UnaryOperation(CommonExpression expression) {
         this.expression = expression;
@@ -31,8 +33,7 @@ public abstract class UnaryOperation extends Operation implements UnaryFactory {
 
     @Override
     public int evaluate(int x, int y, int z) {
-        int t = expression.evaluate(x, y, z);
-        return operate(t);
+        return operate(expression.evaluate(x, y, z));
     }
 
     @Override
@@ -46,7 +47,7 @@ public abstract class UnaryOperation extends Operation implements UnaryFactory {
 
     @Override
     public String toString() {
-        return "(" + getSymbol() + expression.toString() + ")";
+        return "(" + getSymbol() + " " + expression.toString() + ")";
     }
 
     @Override

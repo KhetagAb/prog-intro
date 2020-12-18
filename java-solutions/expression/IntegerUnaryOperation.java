@@ -1,7 +1,7 @@
 package expression;
 
 public abstract class IntegerUnaryOperation extends UnaryOperation {
-    public IntegerUnaryOperation() { }
+    public IntegerUnaryOperation(int value) { super(value); }
 
     protected IntegerUnaryOperation(CommonExpression expression) {
         super(expression);

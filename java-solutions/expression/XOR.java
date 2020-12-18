@@ -3,7 +3,9 @@ package expression;
 import java.util.function.BinaryOperator;
 
 public class XOR extends BitwiseOperation {
-    public XOR() { super(); }
+    public XOR(int left, int right) {
+        super(left, right);
+    }
 
     public XOR(CommonExpression left, CommonExpression right) {
         super(left, right);

@@ -2,15 +2,18 @@ package expression.parser;
 
 import expression.*;
 
+import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
 public class ExpressionParser extends AbstractExpressionParser implements Parser {
-    private static final BinaryOperation[] BINARY_OPERATORS = new BinaryOperation[] {
-            new Or(), new And(), new XOR(), new Add(), new Subtract(), new Multiply(), new Divide() };
+    private static final List<List<BinaryOperation>> BINARY_OPERATORS = List.of(
+            List.of(new Or(0, 0)), List.of(new XOR(0, 0)), List.of(new And(0, 0)),
+            List.of(new Add(0, 0), new Subtract(0, 0)),
+            List.of(new Multiply(0, 0), new Divide(0, 0)));
 
     private static final UnaryOperation[] UNARY_OPERATORS = new UnaryOperation[] {
-            new Negate(), new Flip(), new Low() };
+            new Negate(0), new Flip(0), new Low(0) };
 
 
     public ExpressionParser() {
@@ -32,27 +35,29 @@ public class ExpressionParser extends AbstractExpressionParser implements Parser
             return parseValue();
         }
 
+        skipWhitespace();
         int nextLevel = ranks.getNextRank(level);
 
-        skipWhitespace();
         CommonExpression parsed = parseLevel(nextLevel);
+        String operator = parseBinaryOperator();
 
-        // (z   )/10
-        while (true) {
-            skipWhitespace();
-
-            if (ch == ')')
-                return parsed;
-
-            String operator = parseBinaryOperator();
-            if (operator == null || level != ranks.getRank(operator)) {
-                return parsed;
-            }
-
+        while (operator != null && level == ranks.getRank(operator)) {
             expect(operator);
-
-            parsed = binFactories.buildExpression(operator, parsed, parseLevel(nextLevel));
+            parsed = buildExpression(operator, parsed, parseLevel(nextLevel));
+            operator = parseBinaryOperator();
         }
+
+        return parsed;
+    }
+
+    protected CommonExpression buildExpression(String operator, CommonExpression left, CommonExpression right) {
+        BinaryOperator<CommonExpression> factory = binFactories.getOperator(operator);
+
+        if (factory != null) {
+            return factory.apply(left, right);
+        }
+
+        throw new IllegalStateException("Unknown operator");
     }
 
     private CommonExpression parseValue() {
@@ -86,16 +91,20 @@ public class ExpressionParser extends AbstractExpressionParser implements Parser
     private String parseBinaryOperator() {
         skipWhitespace();
 
-        if (isLetter()) {
-            return parseToken(ch -> isLetter(ch) || isDigit(ch));
+        if (ch == ')' || ch == 0) {
+            return null;
+        } else if (isLetter()) {
+            return checkToken(ch -> isLetter(ch) || isDigit(ch));
         } else {
-            return ch == 0 ? null : Character.toString(ch);
+            return Character.toString(ch);
         }
     }
 
     private UnaryOperator<CommonExpression> parseUnaryOperator() {
         skipWhitespace();
 
+        // toDo Fix "((low ed) * 123456)"
+        // toDo Fix "l * 12345" -> " * 12345"
         while (true) {
             if (unFactories.check(ch) && !unFactories.isOperator()) {
                 nextChar();
@@ -114,19 +123,11 @@ public class ExpressionParser extends AbstractExpressionParser implements Parser
 
     private CommonExpression parseConst(final String prefix) {
         skipWhitespace();
-
-        String token = parseToken(BaseParser::isDigit);
-        expect(token);
-
-        return new Const(Integer.parseInt(prefix + token));
+        return new Const(Integer.parseInt(prefix + parseToken(BaseParser::isDigit)));
     }
 
     private CommonExpression parseVariable() {
         skipWhitespace();
-
-        String token = parseToken(BaseParser::isLetter);
-        expect(token);
-
-        return new Variable(token);
+        return new Variable(parseToken(BaseParser::isLetter));
     }
 }
