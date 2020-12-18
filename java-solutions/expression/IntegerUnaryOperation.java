@@ -8,7 +8,7 @@ public abstract class IntegerUnaryOperation extends UnaryOperation {
     }
 
     @Override
-    protected double operate(double value) {
+    public double operate(double value) {
         throw new UnsupportedOperationException("Double don't support LOW operator.");
     }
 }
