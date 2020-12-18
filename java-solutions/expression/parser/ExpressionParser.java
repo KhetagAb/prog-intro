@@ -8,7 +8,7 @@ import java.util.function.UnaryOperator;
 
 public class ExpressionParser extends AbstractExpressionParser implements Parser {
     private static final List<List<BinaryOperation>> BINARY_OPERATORS = List.of(
-            List.of(new Or(null, null)),
+            List.of(/*"|", Or::new*/new Or(null, null)),
             List.of(new XOR(0, 0)),
             List.of(new And(0, 0)),
             List.of(new Add(0, 0), new Subtract(0, 0)),
@@ -16,7 +16,8 @@ public class ExpressionParser extends AbstractExpressionParser implements Parser
     );
 
     private static final UnaryOperation[] UNARY_OPERATORS = new UnaryOperation[] {
-            new Negate(0), new Flip(0), new Low(0) };
+            new Negate(0), new Flip(0), new Low(0)
+    };
 
 
     public ExpressionParser() {
@@ -44,6 +45,7 @@ public class ExpressionParser extends AbstractExpressionParser implements Parser
         CommonExpression parsed = parseLevel(nextLevel);
         String operator = parseBinaryOperator();
 
+        // :NOTE: Упростить
         while (operator != null && level == ranks.getRank(operator)) {
             expect(operator);
             parsed = buildExpression(operator, parsed, parseLevel(nextLevel));
@@ -94,6 +96,7 @@ public class ExpressionParser extends AbstractExpressionParser implements Parser
     private String parseBinaryOperator() {
         skipWhitespace();
 
+        // :NOTE: Костыль
         if (ch == ')' || ch == 0) {
             return null;
         } else if (isLetter()) {
@@ -103,6 +106,7 @@ public class ExpressionParser extends AbstractExpressionParser implements Parser
         }
     }
 
+    // :NOTE: Убрать лишние знания
     private UnaryOperator<CommonExpression> parseUnaryOperator() {
         skipWhitespace();
 
