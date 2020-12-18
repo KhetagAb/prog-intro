@@ -97,7 +97,7 @@ public abstract class AbstractExpressionParser extends BaseParser {
         char current;
         do {
             current = forwardChar(pos++);
-        } while (binaries.check(current) && !binaries.isOperator());
+        } while (binaries.check(current));
 
         String operator = binaries.getOperator();
         if (operator == null || ranks.getRank(operator) != level) {
