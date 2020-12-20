@@ -1,5 +1,7 @@
 package expression.parser;
 
+import expression.exceptions.ParserException;
+
 import java.util.InputMismatchException;
 import java.util.function.Predicate;
 
@@ -61,24 +63,22 @@ public abstract class BaseParser {
         return sb.length() == 0 ? null : sb.toString();
     }
 
-    protected void expect(final char expected) {
-        // toDo HM-12
+    protected void expect(final char expected) throws ParserException {
         if (ch != expected) {
-            throw new InputMismatchException("Mismatch exception. Expected: " + expected + ", found: " + ch);
+            throw error("Mismatch exception. Expected: " + (expected == '\0' ? "nothing" : expected) + ", found: " + (ch == '\0' ? "nothing" : ch));
         }
 
         nextChar();
     }
 
-    protected void expect(final String expected) {
-        // toDo HM-12
+    protected void expect(final String expected) throws ParserException {
         int i = 0;
         try {
             while (i < expected.length()) {
                 expect(expected.charAt(i++));
             }
         } catch (InputMismatchException e) {
-            throw new InputMismatchException("Mismatch exception. Expected: " + expected + ", found: " + (expected.substring(0, i) + ch));
+            throw error("Mismatch exception. Expected: " + expected + ", found: " + (expected.substring(0, i) + ch));
         }
     }
 
@@ -96,12 +96,20 @@ public abstract class BaseParser {
         }
     }
 
+    protected ParserException error(final String message) {
+        return source.error(message);
+    }
+
     protected static boolean isDigit(final char ch) {
         return '0' <= ch && ch <= '9';
     }
 
     protected static boolean isLetter(final char ch) {
         return Character.isLetter(ch);
+    }
+
+    protected static boolean isSign(final char ch) {
+        return !isDigit(ch) && !isLetter(ch);
     }
 
     protected static boolean isWhiteSpace(final char ch) {

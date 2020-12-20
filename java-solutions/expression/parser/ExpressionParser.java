@@ -1,49 +1,49 @@
 package expression.parser;
 
 import expression.*;
+import expression.exceptions.ParserException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.BinaryOperator;
+import java.util.function.UnaryOperator;
 
 public class ExpressionParser extends AbstractExpressionParser implements Parser {
-    private static final List<List<Pair>> BINARY_OPERATORS = List.of(
-            List.of(new Pair("|", Or::new)),
-            List.of(new Pair("^", XOR::new)),
-            List.of(new Pair("&", And::new)),
-            List.of(new Pair("+", Add::new), new Pair("-", Subtract::new)),
-            List.of(new Pair("*", Multiply::new), new Pair("/", Divide::new))
+    private static final List<Map<String, BinaryOperator<CommonExpression>>> BINARY_OPERATORS = List.of(
+            Map.of("|", Or::new),
+            Map.of("^", XOR::new),
+            Map.of("&", And::new),
+            Map.of("+", Add::new, "-", Subtract::new),
+            Map.of("*", Multiply::new, "/", Divide::new)
     );
 
-    private static final UnaryOperation[] UNARY_OPERATORS = new UnaryOperation[] {
-            new Negate(null), new Flip(null), new Low(null)
-    };
+    private static final Map<String, UnaryOperator<CommonExpression>> UNARY_OPERATORS = Map.of(
+            "-", Negate::new, "flip", Flip::new, "low", Low::new
+    );
 
+    private static final List<String> VARIABLES = List.of(
+            "x", "y", "z"
+    );
+
+    private static final Map<Character, Character> BRACKETS = Map.of(
+            '(', ')'
+    );
 
     public ExpressionParser() {
-        super(BINARY_OPERATORS, UNARY_OPERATORS);
+        super(BINARY_OPERATORS, UNARY_OPERATORS, VARIABLES, BRACKETS);
     }
 
     @Override
     public TripleExpression parse(String expression) {
         setSource(new StringSource(expression));
-        return parseExpression();
-    }
-}
 
-class Pair {
-    private String key;
-    private BinaryOperator<CommonExpression> value;
+        TripleExpression parsed;
+        try {
+            parsed = parseExpression();
+        } catch (ParserException e) {
+            throw new IllegalStateException("Unreachable statement!");
+        }
 
-    public Pair(String key, BinaryOperator<CommonExpression> value) {
-        this.key = key;
-        this.value = value;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public BinaryOperator<CommonExpression> getValue() {
-        return value;
+        return parsed;
     }
 }
