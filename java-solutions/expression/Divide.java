@@ -1,7 +1,5 @@
 package expression;
 
-import java.util.function.BinaryOperator;
-
 public class Divide extends BinaryOperation {
     public Divide(CommonExpression left, CommonExpression right) {
         super(left, right);
@@ -15,11 +13,6 @@ public class Divide extends BinaryOperation {
     @Override
     public String getSymbol() {
         return "/";
-    }
-
-    @Override
-    public BinaryOperator<CommonExpression> getFactory() {
-        return Divide::new;
     }
 
     @Override

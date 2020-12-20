@@ -1,7 +1,5 @@
 package expression;
 
-import java.util.function.BinaryOperator;
-
 public class Or extends BitwiseOperation {
     public Or(CommonExpression left, CommonExpression right) {
         super(left, right);
@@ -15,11 +13,6 @@ public class Or extends BitwiseOperation {
     @Override
     public String getSymbol() {
         return "|";
-    }
-
-    @Override
-    public BinaryOperator<CommonExpression> getFactory() {
-        return Or::new;
     }
 
     @Override

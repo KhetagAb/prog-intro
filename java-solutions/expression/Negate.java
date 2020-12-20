@@ -1,7 +1,5 @@
 package expression;
 
-import java.util.function.UnaryOperator;
-
 public class Negate extends UnaryOperation {
     public Negate(CommonExpression expression) {
         super(expression);
@@ -10,11 +8,6 @@ public class Negate extends UnaryOperation {
     @Override
     public String getSymbol() {
         return "-";
-    }
-
-    @Override
-    public UnaryOperator<CommonExpression> getFactory() {
-        return Negate::new;
     }
 
     @Override

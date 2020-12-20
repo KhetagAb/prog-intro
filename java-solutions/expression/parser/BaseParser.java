@@ -6,6 +6,7 @@ import java.util.InputMismatchException;
 import java.util.function.Predicate;
 
 public abstract class BaseParser {
+    private final static char EOF = '\0';
     private ExpressionSource source;
     protected char ch;
 
@@ -15,20 +16,15 @@ public abstract class BaseParser {
     }
 
     protected void nextChar() {
-        ch = source.hasNext() ? source.next() : '\0';
+        ch = source.hasNext() ? source.next() : EOF;
     }
 
     protected char forwardChar(int forward) {
-        return source.hasNext(forward) ? source.getNext(forward) : '\0';
+        return source.hasNext(forward) ? source.getNext(forward) : EOF;
     }
 
     protected boolean test(final char expected) {
-        if (ch == expected) {
-            nextChar();
-            return true;
-        }
-
-        return false;
+        return test(ch -> ch == expected);
     }
 
     protected boolean test(final Predicate<Character> tokenChecker) {
@@ -51,21 +47,9 @@ public abstract class BaseParser {
         return sb.length() == 0 ? null : sb.toString();
     }
 
-    protected String checkToken(final Predicate<Character> tokenChecker) {
-        final StringBuilder sb = new StringBuilder();
-
-        char cur = forwardChar(sb.length());
-        while (ch != 0 && tokenChecker.test(cur)) {
-            sb.append(cur);
-            cur = forwardChar(sb.length());
-        }
-
-        return sb.length() == 0 ? null : sb.toString();
-    }
-
     protected void expect(final char expected) throws ParserException {
         if (ch != expected) {
-            throw error("Mismatch exception. Expected: " + (expected == '\0' ? "nothing" : expected) + ", found: " + (ch == '\0' ? "nothing" : ch));
+            throw error("Mismatch exception. Expected: " + checkedChar(expected) + ", found: " + checkedChar(ch));
         }
 
         nextChar();
@@ -90,12 +74,6 @@ public abstract class BaseParser {
         return isLetter(ch);
     }
 
-    protected void skipWhitespace() {
-        while (test(BaseParser::isWhiteSpace)) {
-            // Empty body
-        }
-    }
-
     protected ParserException error(final String message) {
         return source.error(message);
     }
@@ -114,5 +92,13 @@ public abstract class BaseParser {
 
     protected static boolean isWhiteSpace(final char ch) {
         return ch == ' ' || ch == '\r' || ch == '\n' || ch == '\t';
+    }
+
+    protected static String checkedChar(final char str) {
+        if (str == EOF) {
+            return "nothing";
+        } else {
+            return Character.toString(str);
+        }
     }
 }

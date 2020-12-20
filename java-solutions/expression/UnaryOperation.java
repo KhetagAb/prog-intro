@@ -2,7 +2,7 @@ package expression;
 
 import java.util.Objects;
 
-public abstract class UnaryOperation extends Operation implements UnaryFactory {
+public abstract class UnaryOperation extends Operation {
     protected final CommonExpression expression;
 
     protected abstract int operate(int value);

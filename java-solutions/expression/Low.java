@@ -1,7 +1,5 @@
 package expression;
 
-import java.util.function.UnaryOperator;
-
 public class Low extends IntegerUnaryOperation {
     public Low(CommonExpression expression) {
         super(expression);
@@ -12,10 +10,6 @@ public class Low extends IntegerUnaryOperation {
         return "low";
     }
 
-    @Override
-    public UnaryOperator<CommonExpression> getFactory() {
-        return Low::new;
-    }
     @Override
     protected int operate(int value) {
         return Integer.lowestOneBit(value);

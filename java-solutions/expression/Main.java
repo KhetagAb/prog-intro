@@ -19,7 +19,7 @@ public class Main {
             op("(())", "(())"),
             op("Spaces in numbers", "10 20")
          */
-        new ExpressionParser().parse("x*y+(z-1)/10");
+        new ExpressionParser().parse("absx");
 
         try {
             TripleExpression expression = new ExpressionParser().parse("1000000*x*x*x*x*x/(x-1)");
@@ -30,7 +30,7 @@ public class Main {
 
                     System.out.println(result);
                 } catch (OperationOverflowException e) {
-                    System.out.println("overflow");
+                    System.out.println("overflow" + e.getMessage());
                 } catch (DivideByZeroException e) {
                     System.out.println("division by zero");
                 }

@@ -18,6 +18,8 @@ public abstract class AbstractExpressionParser extends BaseParser {
     private final Map<String, BinaryOperator<CommonExpression>> binaryFactories = new HashMap<>();
     private final Map<String, UnaryOperator<CommonExpression>> unaryFactories = new HashMap<>();
 
+    private String lastOperator;
+
     protected AbstractExpressionParser(final List<Map<String, BinaryOperator<CommonExpression>>> binaryOperators,
                                        final Map<String, UnaryOperator<CommonExpression>> unaryOperators,
                                        final List<String> variables,
@@ -48,6 +50,7 @@ public abstract class AbstractExpressionParser extends BaseParser {
 
         skipWhitespace();
         expect('\0');
+
         return parsed;
     }
 
@@ -73,7 +76,7 @@ public abstract class AbstractExpressionParser extends BaseParser {
         String operator = parseIdentifier(Identifier.BINARY);
         // toDo Check WTF WITH ')'?
         if (operator == null && ch != '\0' && ch != ')') {
-            throw error("Input mismatch exception: Expected binary operator");
+            throw error("Mismatch exception: Expected binary operator, found: " + ch);
         } if (operator == null || operatorToRank.get(operator) != level) {
             return null;
         } else {
@@ -110,9 +113,14 @@ public abstract class AbstractExpressionParser extends BaseParser {
         return parsed;
     }
 
-    protected CommonExpression parseConst(final String prefix) {
+    protected CommonExpression parseConst(final String prefix) throws ParserException {
         skipWhitespace();
-        return new Const(Integer.parseInt(prefix + parseToken(BaseParser::isDigit)));
+        String parsed = prefix + parseToken(BaseParser::isDigit);
+        try {
+            return new Const(Integer.parseInt(parsed));
+        } catch (NumberFormatException e) {
+            throw error("Invalid const value: " + e.getMessage());
+        }
     }
 
     protected CommonExpression parseValue() throws ParserException {
@@ -129,7 +137,7 @@ public abstract class AbstractExpressionParser extends BaseParser {
         String variable = parseIdentifier(Identifier.VAR);
 
         if (variable == null) {
-            throw error("Input mismatch exception: Expected variable, found nothing");
+            throw error("Mismatch exception: Expected variable, found " + ch);
         } else {
             expect(variable);
             return new Variable(variable);
@@ -142,7 +150,7 @@ public abstract class AbstractExpressionParser extends BaseParser {
 
         int pos = 0;
         boolean isWordType = isLetter();
-        while (identifiers.test(forwardChar(pos++)) && !identifiers.checkIdentifier(type)) {
+        while (identifiers.test(forwardChar(pos++)) && !(identifiers.checkIdentifier(type) && isWordType && isSign(forwardChar(pos)))) {
             // emptyBody
         }
 
@@ -177,6 +185,12 @@ public abstract class AbstractExpressionParser extends BaseParser {
 
     protected int getMaxRank() {
         return maxRank;
+    }
+
+    protected void skipWhitespace() {
+        while (test(BaseParser::isWhiteSpace)) {
+            // Empty body
+        }
     }
 
     protected class TrieExpression {

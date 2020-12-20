@@ -2,7 +2,7 @@ package expression;
 
 import java.util.Objects;
 
-public abstract class BinaryOperation extends Operation implements BinaryFactory {
+public abstract class BinaryOperation extends Operation {
     protected final CommonExpression left, right;
 
     protected abstract boolean isAssociative();

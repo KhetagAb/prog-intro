@@ -21,11 +21,7 @@ public class StringSource implements ExpressionSource {
     }
 
     public char getNext(int forward) {
-        if (hasNext(forward)) {
-            return source.charAt(pos + forward - 1);
-        } else {
-            return 0;
-        }
+        return source.charAt(pos + forward - 1);
     }
 
     @Override
