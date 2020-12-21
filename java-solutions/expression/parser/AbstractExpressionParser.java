@@ -135,8 +135,7 @@ public abstract class AbstractExpressionParser extends BaseParser {
         tokens.parseToken();
 
         String value = tokens.getValue(Token.UNARY);
-
-        // toDo simplify
+        
         if (value != null) {
             return buildUnOperator(value, parseMaxLevel());
         } else {
