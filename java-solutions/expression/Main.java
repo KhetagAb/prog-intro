@@ -19,7 +19,11 @@ public class Main {
             op("(())", "(())"),
             op("Spaces in numbers", "10 20")
          */
-        new ExpressionParser().parse("absx");
+        //System.out.println(new expression.parser.ExpressionParser().parse("x*y+(z-1   )/10").toMiniString());
+
+        ExpressionParser parser = new ExpressionParser();
+        System.out.println(parser.parse("x*y+(z-1   )/10").toMiniString());
+        System.out.println(parser.parse(" x*y+(z-1   )/10").toMiniString());
 
         try {
             TripleExpression expression = new ExpressionParser().parse("1000000*x*x*x*x*x/(x-1)");

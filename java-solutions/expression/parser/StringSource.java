@@ -26,7 +26,7 @@ public class StringSource implements ExpressionSource {
 
     @Override
     public ParserException error(String message) {
-        return new ParserException("Exception from pos " + (pos - 1) +  ": " + message);
+        return new ParserException("Exception from pos " + pos +  ": " + message);
     }
 
     public char next() {

@@ -2,7 +2,6 @@ package expression.parser;
 
 import expression.exceptions.ParserException;
 
-import java.util.InputMismatchException;
 import java.util.function.Predicate;
 
 public abstract class BaseParser {
@@ -49,21 +48,10 @@ public abstract class BaseParser {
 
     protected void expect(final char expected) throws ParserException {
         if (ch != expected) {
-            throw error("Mismatch exception. Expected: " + checkedChar(expected) + ", found: " + checkedChar(ch));
+            throw error("Expected: " + formatChar(expected) + ", found: " + formatChar(ch));
         }
 
         nextChar();
-    }
-
-    protected void expect(final String expected) throws ParserException {
-        int i = 0;
-        try {
-            while (i < expected.length()) {
-                expect(expected.charAt(i++));
-            }
-        } catch (InputMismatchException e) {
-            throw error("Mismatch exception. Expected: " + expected + ", found: " + (expected.substring(0, i) + ch));
-        }
     }
 
     protected boolean isDigit() {
@@ -94,11 +82,20 @@ public abstract class BaseParser {
         return ch == ' ' || ch == '\r' || ch == '\n' || ch == '\t';
     }
 
-    protected static String checkedChar(final char str) {
-        if (str == EOF) {
+    // toDo check
+    protected String formatString(final String str) {
+        if (str == null || str.equals("")) {
+            return formatChar(ch);
+        } else {
+            return '\"' + str + ((ch != EOF && !isWhiteSpace(ch)) ? ch : "") + '"';
+        }
+    }
+
+    protected String formatChar(final char ch) {
+        if (ch == EOF || isWhiteSpace(ch)) {
             return "nothing";
         } else {
-            return Character.toString(str);
+            return "\"" + ch + "\"";
         }
     }
 }
