@@ -10,10 +10,6 @@ public class CheckedNegate extends Negate {
 
     @Override
     protected int operate(int value) {
-        if (value == Integer.MIN_VALUE) {
-            throw new OperationOverflowException(value + " = overflow");
-        }
-
-        return super.operate(value);
+        return MyMath.checkedNegate(value);
     }
 }

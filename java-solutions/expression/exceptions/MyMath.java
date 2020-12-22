@@ -55,6 +55,17 @@ public class MyMath {
         return left / right;
     }
 
+    public static int checkedNegate(int value) {
+        return checkedNegate(value, "-");
+    }
+    public static int checkedNegate(int value, String symbol) {
+        if (value == Integer.MIN_VALUE) {
+            throw new OperationOverflowException(symbol + value);
+        }
+
+        return -value;
+    }
+
     public static int gcd(int a, int b) {
         while (b != 0) {
             a %= b;

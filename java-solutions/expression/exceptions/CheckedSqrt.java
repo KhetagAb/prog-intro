@@ -16,7 +16,7 @@ public class CheckedSqrt extends IntegerUnaryOperation {
     @Override
     protected int operate(int value) {
         if (value < 0) {
-            throw new SqrtOfNegativeException("Invalid number exception: Sqrt of negative value: " + value);
+            throw new SqrtOfNegativeException("Sqrt of negative value: " + value);
         }
 
         return (int) Math.sqrt(value);
