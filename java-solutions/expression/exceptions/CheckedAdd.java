@@ -10,10 +10,6 @@ public class CheckedAdd extends Add {
 
     @Override
     protected int operate(int left, int right) {
-        if (MyMath.checkAddOverflow(left, right)) {
-            throw new OperationOverflowException(left + " add " + right + " = overflow");
-        }
-
-        return super.operate(left, right);
+        return MyMath.checkedAdd(left, right);
     }
 }

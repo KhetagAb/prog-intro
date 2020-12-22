@@ -10,10 +10,6 @@ public class CheckedSubtract extends Subtract {
 
     @Override
     protected int operate(int left, int right) {
-        if (MyMath.checkSubtractOverflow(left, right)) {
-            throw new OperationOverflowException(left + getSymbol() + right);
-        }
-
-        return super.operate(left, right);
+        return MyMath.checkedSubtract(left, right);
     }
 }

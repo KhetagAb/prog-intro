@@ -6,25 +6,7 @@ import expression.exceptions.OperationOverflowException;
 import expression.exceptions.ParserException;
 
 public class Main {
-    public static void main(String[] args) throws ParserException {
-        /*
-            op("Start symbol", "@x * y"),
-            op("Middle symbol", "x @ * y"),
-            op("End symbol", "x * y@"),
-            op("Constant overflow 1", Integer.MIN_VALUE - 1L + ""),
-            op("Constant overflow 2", Integer.MAX_VALUE + 1L + ""),
-            op("Bare +", "+"),
-            op("Bare -", "-"),
-            op("Bare a", "a"),
-            op("(())", "(())"),
-            op("Spaces in numbers", "10 20")
-         */
-        //System.out.println(new expression.parser.ExpressionParser().parse("x*y+(z-1   )/10").toMiniString());
-
-        ExpressionParser parser = new ExpressionParser();
-        System.out.println(parser.parse("x*y+(z-1   )/10").toMiniString());
-        System.out.println(parser.parse(" x*y+(z-1   )/10").toMiniString());
-
+    public static void main(String[] args) {
         try {
             TripleExpression expression = new ExpressionParser().parse("1000000*x*x*x*x*x/(x-1)");
 
@@ -34,7 +16,7 @@ public class Main {
 
                     System.out.println(result);
                 } catch (OperationOverflowException e) {
-                    System.out.println("overflow" + e.getMessage());
+                    System.out.println("overflow");
                 } catch (DivideByZeroException e) {
                     System.out.println("division by zero");
                 }

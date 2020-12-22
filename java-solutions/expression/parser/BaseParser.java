@@ -5,9 +5,9 @@ import expression.exceptions.ParserException;
 import java.util.function.Predicate;
 
 public abstract class BaseParser {
-    private final static char EOF = '\0';
-    private ExpressionSource source;
+    protected final static char EOF = '\0';
     protected char ch;
+    private ExpressionSource source;
 
     protected void setSource(final ExpressionSource source) {
         this.source = source;
@@ -74,20 +74,15 @@ public abstract class BaseParser {
         return Character.isLetter(ch);
     }
 
-    protected static boolean isSign(final char ch) {
-        return !isDigit(ch) && !isLetter(ch);
-    }
-
     protected static boolean isWhiteSpace(final char ch) {
         return ch == ' ' || ch == '\r' || ch == '\n' || ch == '\t';
     }
 
-    // toDo check
     protected String formatString(final String str) {
-        if (str == null || str.equals("")) {
+        if (str == null || str.length() == 0) {
             return formatChar(ch);
         } else {
-            return '\"' + str + ((ch != EOF && !isWhiteSpace(ch)) ? ch : "") + '"';
+            return '"' + str + ((ch != EOF && !isWhiteSpace(ch)) ? ch : "") + '"';
         }
     }
 

@@ -6,6 +6,6 @@ public class SqrtOfNegativeException extends ExpressionException {
     }
 
     public SqrtOfNegativeException() {
-        this("Invalid number exception: Sqrt of negative value");
+        this("Sqrt of negative number exception");
     }
 }

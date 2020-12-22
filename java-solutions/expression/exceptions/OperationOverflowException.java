@@ -1,12 +1,11 @@
 package expression.exceptions;
 
 public class OperationOverflowException extends ExpressionException {
-    // toDo very bad?
     public OperationOverflowException(String msg) {
-        super("Overflow exception" + (msg == null ? "" : (": " + msg)));
+        super("Overflow exception: " + msg);
     }
 
     public OperationOverflowException() {
-        this(null);
+        super("Overflow exception");
     }
 }

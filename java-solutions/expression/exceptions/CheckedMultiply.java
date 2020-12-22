@@ -10,10 +10,6 @@ public class CheckedMultiply extends Multiply {
 
     @Override
     protected int operate(int left, int right) {
-        if (MyMath.checkMultiplyOverflow(left, right)) {
-            throw new OperationOverflowException();
-        }
-
-        return super.operate(left, right);
+        return MyMath.checkedMultiply(left, right);
     }
 }

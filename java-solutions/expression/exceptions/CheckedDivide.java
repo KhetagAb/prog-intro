@@ -10,12 +10,6 @@ public class CheckedDivide extends Divide {
 
     @Override
     protected int operate(int left, int right) {
-        if (right == 0) {
-            throw new DivideByZeroException();
-        } else if (MyMath.checkDivideOverflow(left, right)) {
-            throw new OperationOverflowException(left + " divide " + right + " = overflow");
-        }
-
-        return super.operate(left, right);
+        return MyMath.checkedDivide(left, right);
     }
 }

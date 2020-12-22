@@ -49,7 +49,10 @@ public abstract class AbstractExpressionParser extends BaseParser {
         CommonExpression parsed = parseLevel(0);
 
         skipWhitespace();
-        expect('\0');
+
+        if (ch != EOF) {
+            throw error("Expected binary operator, found " + formatString(tokens.toRoot()));
+        }
 
         return parsed;
     }
@@ -60,21 +63,26 @@ public abstract class AbstractExpressionParser extends BaseParser {
         }
 
         CommonExpression parsed = parseLevel(level + 1);
+        parseBinaryOperator();
 
-        while (true) {
-            parseBinaryOperator();
-
-            if (lastOperator == null || getRank(lastOperator) != level)
-                break;
-
-            // toDo simplify
+        while (lastOperator != null && getRank(lastOperator) == level) {
             String operator = lastOperator;
             lastOperator = null;
-
             parsed = buildBinOperator(operator, parsed, parseLevel(level + 1));
+            parseBinaryOperator();
         }
 
         return parsed;
+    }
+
+    protected void parseBinaryOperator() throws ParserException {
+        if (lastOperator != null) {
+            return;
+        }
+
+        skipWhitespace();
+        tokens.parseToken();
+        lastOperator = tokens.getBinaryOperator();
     }
 
     protected CommonExpression parseMaxLevel() throws ParserException {
@@ -113,39 +121,21 @@ public abstract class AbstractExpressionParser extends BaseParser {
         }
     }
 
-    protected void parseBinaryOperator() throws ParserException {
-        if (lastOperator != null) {
-            return;
-        }
-
-        skipWhitespace();
-        tokens.parseToken();
-
-        String operator = tokens.getBinaryOperator();
-        // toDo Check WTF WITH ')'?
-        if (operator == null && ch != '\0' && ch != ')') {
-            throw error("Expected binary operator, found " + formatString(tokens.getValue(Token.NotAValue)));
-        }
-
-        lastOperator = operator;
-    }
-
     protected CommonExpression parseValue() throws ParserException {
         skipWhitespace();
         tokens.parseToken();
-
         String value = tokens.getValue(Token.UNARY);
-        
-        if (value != null) {
-            return buildUnOperator(value, parseMaxLevel());
-        } else {
+
+        if (value == null) {
             value = tokens.getValue(Token.VARIABLE);
 
-            if (value != null) {
-                return new Variable(value);
-            } else {
-                throw error("Expected variable, found: " + formatString(tokens.getValue(Token.NotAValue)));
+            if (value == null) {
+                throw error("Expected variable, found: " + formatString(tokens.toRoot()));
             }
+
+            return new Variable(value);
+        } else {
+            return buildUnOperator(value, parseMaxLevel());
         }
     }
 
@@ -158,10 +148,18 @@ public abstract class AbstractExpressionParser extends BaseParser {
     }
 
     protected BinaryOperator<CommonExpression> getBinaryFactory(String operator) {
+        if (!binaryFactories.containsKey(operator)) {
+            throw new IllegalStateException("Unsupported binary operator");
+        }
+
         return binaryFactories.get(operator);
     }
 
     protected UnaryOperator<CommonExpression> getUnaryFactory(String operator) {
+        if (!unaryFactories.containsKey(operator)) {
+            throw new IllegalStateException("Unsupported unary operator");
+        }
+
         return unaryFactories.get(operator);
     }
 
@@ -180,7 +178,7 @@ public abstract class AbstractExpressionParser extends BaseParser {
     }
 
     protected class TrieExpression {
-        public TrieExpression() {
+        protected TrieExpression() {
             this.root = new Node();
             this.pos = this.root;
             this.sb = new StringBuilder();
@@ -190,11 +188,11 @@ public abstract class AbstractExpressionParser extends BaseParser {
         private final StringBuilder sb;
         private Node pos;
 
-        private void putBinaryOperator(String str) {
+        protected void putBinaryOperator(String str) {
             getNode(str).isBinaryOperator = true;
         }
 
-        private void putValue(String str, Token type) {
+        protected void putValue(String str, Token type) {
             getNode(str).type = type;
         }
 
@@ -209,7 +207,7 @@ public abstract class AbstractExpressionParser extends BaseParser {
             return v;
         }
 
-        private void parseToken() {
+        protected void parseToken() {
             while (pos.nodes.containsKey(ch)) {
                 pos = pos.nodes.get(ch);
                 sb.append(ch);
@@ -217,36 +215,31 @@ public abstract class AbstractExpressionParser extends BaseParser {
             }
         }
 
-        private boolean isBinaryOperator() {
+        private String checkForWordType(String value, String type) throws ParserException {
+            if (value != null && (value.length() == 0 || isLetter(value.charAt(0)) && (isDigit() || isLetter()))) {
+                throw error("Invalid " + type + " found " + formatString(value));
+            }
+
+            return value;
+        }
+
+        protected boolean isBinaryOperator() {
             return pos.isBinaryOperator;
         }
 
-        private boolean isMatch(Token type) {
+        protected boolean isMatch(Token type) {
             return pos.type == type;
         }
 
-        // toDo check
-        private String checkForWordType(String value, String type) throws ParserException {
-            if (value != null && isLetter(value.charAt(0)) && (isDigit() || isLetter())) {
-                throw error("Invalid " + type + " found " + formatString(value));
-            } else {
-                return value;
-            }
-        }
-
-        private String getBinaryOperator() throws ParserException {
+        protected String getBinaryOperator() throws ParserException {
             return isBinaryOperator() ? checkForWordType(toRoot(), "binary operator") : null;
         }
 
-        private String getValue(Token type) throws ParserException {
-            if (type == Token.NotAValue && pos.type == Token.NotAValue) {
-                return toRoot();
-            } else {
-                return isMatch(type) ? checkForWordType(toRoot(), type.getName()) : null;
-            }
+        protected String getValue(Token type) throws ParserException {
+            return isMatch(type) ? checkForWordType(toRoot(), type.getName()) : null;
         }
 
-        private String toRoot() {
+        protected String toRoot() {
             String value = sb.length() == 0 ? null : sb.toString();
             pos = root;
             sb.setLength(0);
@@ -261,7 +254,6 @@ public abstract class AbstractExpressionParser extends BaseParser {
     }
 }
 
-// toDo Optimal?
 enum Token {
     VARIABLE("variable"), UNARY("unary operator"), NotAValue("");
 
@@ -271,7 +263,7 @@ enum Token {
         this.name = value;
     }
 
-    protected String getName() {
+    public String getName() {
         return name;
     }
 }
