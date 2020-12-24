@@ -1,7 +1,5 @@
 package expression.parser;
 
-import expression.exceptions.ParserException;
-
 public class StringSource implements ExpressionSource {
     private final String source;
     private int pos;
@@ -25,8 +23,8 @@ public class StringSource implements ExpressionSource {
     }
 
     @Override
-    public ParserException error(String message) {
-        return new ParserException("Exception from pos " + pos +  ": " + message);
+    public String posExceptionMessage(String message) {
+        return "Exception from pos " + (pos - 1) + ": " + message;
     }
 
     public char next() {

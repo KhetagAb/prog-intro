@@ -10,6 +10,15 @@ public class CheckedSubtract extends Subtract {
 
     @Override
     protected int operate(int left, int right) {
-        return MyMath.checkedSubtract(left, right);
+        if (!check(left, right)) {
+            throw new ExpressionOverflowException(left + " " + getSymbol() + " " + right);
+        }
+
+        return left - right;
+    }
+
+    public static boolean check(int left, int right) {
+        return !(right < 0 && Integer.MAX_VALUE + right < left ||
+                right > 0 && Integer.MIN_VALUE + right > left);
     }
 }

@@ -10,6 +10,14 @@ public class CheckedNegate extends Negate {
 
     @Override
     protected int operate(int value) {
-        return MyMath.checkedNegate(value);
+        if (!check(value)) {
+            throw new ExpressionOverflowException(getSymbol() + value);
+        }
+
+        return -value;
+    }
+
+    public static boolean check(int value) {
+        return value != Integer.MIN_VALUE;
     }
 }

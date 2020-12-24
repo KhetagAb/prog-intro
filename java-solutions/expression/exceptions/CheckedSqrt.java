@@ -15,10 +15,14 @@ public class CheckedSqrt extends IntegerUnaryOperation {
 
     @Override
     protected int operate(int value) {
-        if (value < 0) {
-            throw new SqrtOfNegativeException("Sqrt of negative value: " + value);
+        if (!check(value)) {
+            throw new SqrtOfNegativeException(Integer.toString(value));
         }
 
         return (int) Math.sqrt(value);
+    }
+
+    public static boolean check(int value) {
+        return value >= 0;
     }
 }

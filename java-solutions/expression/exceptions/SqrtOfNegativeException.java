@@ -1,8 +1,8 @@
 package expression.exceptions;
 
 public class SqrtOfNegativeException extends ExpressionException {
-    public SqrtOfNegativeException(String msg) {
-        super(msg);
+    public SqrtOfNegativeException(String expression) {
+        super("Sqrt of number: " + expression);
     }
 
     public SqrtOfNegativeException() {

@@ -1,8 +1,8 @@
 package expression.exceptions;
 
 public class DivideByZeroException extends ExpressionException {
-    public DivideByZeroException(String msg) {
-        super(msg);
+    public DivideByZeroException(String expression) {
+        super("Division by zero: " + expression);
     }
 
     public DivideByZeroException() {

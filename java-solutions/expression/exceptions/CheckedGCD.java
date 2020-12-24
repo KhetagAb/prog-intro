@@ -9,13 +9,29 @@ public class CheckedGCD extends IntegerBinaryOperation {
     }
 
     @Override
-    public String getSymbol() {
-        return "gcd";
+    public int operate(int left, int right) {
+        if (!check(left, right)) {
+            throw new ExpressionOverflowException(left + " " + getSymbol() + " " + right);
+        }
+
+        while (right != 0) {
+            left %= right;
+
+            left ^= right;
+            right ^= left;
+            left ^= right;
+        }
+
+        return left < 0 ? -left : left;
+    }
+
+    public static boolean check(int a, int b) {
+        return a != Integer.MIN_VALUE || b != Integer.MIN_VALUE;
     }
 
     @Override
-    public int getRank() {
-        return 30000000;
+    public String getSymbol() {
+        return "gcd";
     }
 
     @Override
@@ -29,7 +45,7 @@ public class CheckedGCD extends IntegerBinaryOperation {
     }
 
     @Override
-    protected int operate(int left, int right) {
-        return MyMath.gcd(left, right);
+    public int getRank() {
+        return 30000000;
     }
 }

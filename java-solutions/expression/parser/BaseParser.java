@@ -1,5 +1,6 @@
 package expression.parser;
 
+import expression.exceptions.MismatchException;
 import expression.exceptions.ParserException;
 
 import java.util.function.Predicate;
@@ -48,7 +49,7 @@ public abstract class BaseParser {
 
     protected void expect(final char expected) throws ParserException {
         if (ch != expected) {
-            throw error("Expected: " + formatChar(expected) + ", found: " + formatChar(ch));
+            throw new MismatchException(getPositionMessage("Expected: " + formatChar(expected) + ", found: " + formatChar(ch)));
         }
 
         nextChar();
@@ -62,8 +63,8 @@ public abstract class BaseParser {
         return isLetter(ch);
     }
 
-    protected ParserException error(final String message) {
-        return source.error(message);
+    protected String getPositionMessage(final String message) {
+        return source.posExceptionMessage(message);
     }
 
     protected static boolean isDigit(final char ch) {
@@ -76,14 +77,6 @@ public abstract class BaseParser {
 
     protected static boolean isWhiteSpace(final char ch) {
         return ch == ' ' || ch == '\r' || ch == '\n' || ch == '\t';
-    }
-
-    protected String formatString(final String str) {
-        if (str == null || str.length() == 0) {
-            return formatChar(ch);
-        } else {
-            return '"' + str + ((ch != EOF && !isWhiteSpace(ch)) ? ch : "") + '"';
-        }
     }
 
     protected String formatChar(final char ch) {

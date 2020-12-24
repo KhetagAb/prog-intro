@@ -9,7 +9,17 @@ public class CheckedDivide extends Divide {
     }
 
     @Override
-    protected int operate(int left, int right) {
-        return MyMath.checkedDivide(left, right);
+    public int operate(int left, int right) {
+        if (right == 0) {
+            throw new DivideByZeroException(left + " / 0");
+        } else if (left == Integer.MIN_VALUE && right == -1) {
+            throw new ExpressionOverflowException(left + " " + getSymbol() + " " + right);
+        }
+
+        return left / right;
+    }
+
+    public static boolean check(int left, int right) {
+        return !(right == 0 || left == Integer.MIN_VALUE && right == -1);
     }
 }

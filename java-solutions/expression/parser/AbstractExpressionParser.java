@@ -1,10 +1,14 @@
 package expression.parser;
 
 import expression.*;
+import expression.exceptions.InvalidConstValue;
+import expression.exceptions.InvalidOperatorException;
+import expression.exceptions.InvalidVariableException;
 import expression.exceptions.ParserException;
 
 import java.util.*;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 public abstract class AbstractExpressionParser extends BaseParser {
@@ -51,7 +55,7 @@ public abstract class AbstractExpressionParser extends BaseParser {
         skipWhitespace();
 
         if (ch != EOF) {
-            throw error("Expected binary operator, found " + formatString(tokens.toRoot()));
+            throw invalidTokenException(Token.BINARY, tokens.toRoot());
         }
 
         return parsed;
@@ -117,7 +121,7 @@ public abstract class AbstractExpressionParser extends BaseParser {
         try {
             return new Const(Integer.parseInt(parsed));
         } catch (NumberFormatException e) {
-            throw error("Invalid const value: " + e.getMessage());
+            throw invalidTokenException(Token.CONST, parsed);
         }
     }
 
@@ -130,37 +134,13 @@ public abstract class AbstractExpressionParser extends BaseParser {
             value = tokens.getValue(Token.VARIABLE);
 
             if (value == null) {
-                throw error("Expected variable, found: " + formatString(tokens.toRoot()));
+                throw invalidTokenException(Token.VARIABLE, tokens.toRoot());
             }
 
             return new Variable(value);
         } else {
             return buildUnOperator(value, parseMaxLevel());
         }
-    }
-
-    protected CommonExpression buildBinOperator(String operator, CommonExpression left, CommonExpression right) {
-        return getBinaryFactory(operator).apply(left, right);
-    }
-
-    protected CommonExpression buildUnOperator(String operator, CommonExpression expression) {
-        return getUnaryFactory(operator).apply(expression);
-    }
-
-    protected BinaryOperator<CommonExpression> getBinaryFactory(String operator) {
-        if (!binaryFactories.containsKey(operator)) {
-            throw new IllegalStateException("Unsupported binary operator");
-        }
-
-        return binaryFactories.get(operator);
-    }
-
-    protected UnaryOperator<CommonExpression> getUnaryFactory(String operator) {
-        if (!unaryFactories.containsKey(operator)) {
-            throw new IllegalStateException("Unsupported unary operator");
-        }
-
-        return unaryFactories.get(operator);
     }
 
     protected int getRank(String operator) {
@@ -174,6 +154,36 @@ public abstract class AbstractExpressionParser extends BaseParser {
     protected void skipWhitespace() {
         while (test(BaseParser::isWhiteSpace)) {
             // Empty body
+        }
+    }
+
+    protected CommonExpression buildBinOperator(String operator, CommonExpression left, CommonExpression right) {
+        if (!binaryFactories.containsKey(operator)) {
+            throw new IllegalStateException("Unsupported binary operator");
+        }
+
+        return binaryFactories.get(operator).apply(left, right);
+    }
+
+    protected CommonExpression buildUnOperator(String operator, CommonExpression expression) {
+        if (!unaryFactories.containsKey(operator)) {
+            throw new IllegalStateException("Unsupported unary operator");
+        }
+
+        return unaryFactories.get(operator).apply(expression);
+    }
+
+    protected ParserException invalidTokenException(Token type, String found) {
+        return type.getFactory().apply(getPositionMessage(
+                "Invalid " + type.getExpected() +
+                        " found: " + formatString(found)));
+    }
+
+    protected String formatString(final String str) {
+        if (str == null || str.length() == 0) {
+            return formatChar(ch);
+        } else {
+            return "\"" + str + (ch == EOF || isWhiteSpace(ch) ? "" : ch) + "\"";
         }
     }
 
@@ -215,9 +225,9 @@ public abstract class AbstractExpressionParser extends BaseParser {
             }
         }
 
-        private String checkForWordType(String value, String type) throws ParserException {
+        private String checkForWordType(String value, Token type) throws ParserException{
             if (value != null && (value.length() == 0 || isLetter(value.charAt(0)) && (isDigit() || isLetter()))) {
-                throw error("Invalid " + type + " found " + formatString(value));
+                throw invalidTokenException(type, value);
             }
 
             return value;
@@ -228,15 +238,15 @@ public abstract class AbstractExpressionParser extends BaseParser {
         }
 
         protected boolean isMatch(Token type) {
-            return pos.type == type;
+            return type != null && pos.type == type;
         }
 
         protected String getBinaryOperator() throws ParserException {
-            return isBinaryOperator() ? checkForWordType(toRoot(), "binary operator") : null;
+            return isBinaryOperator() ? checkForWordType(toRoot(), Token.BINARY) : null;
         }
 
         protected String getValue(Token type) throws ParserException {
-            return isMatch(type) ? checkForWordType(toRoot(), type.getName()) : null;
+            return isMatch(type) ? checkForWordType(toRoot(), type) : null;
         }
 
         protected String toRoot() {
@@ -249,21 +259,7 @@ public abstract class AbstractExpressionParser extends BaseParser {
         private class Node {
             private final Map<Character, Node> nodes = new HashMap<>();
             private boolean isBinaryOperator = false;
-            private Token type = Token.NotAValue;
+            private Token type = null;
         }
-    }
-}
-
-enum Token {
-    VARIABLE("variable"), UNARY("unary operator"), NotAValue("");
-
-    private final String name;
-
-    Token(String value) {
-        this.name = value;
-    }
-
-    public String getName() {
-        return name;
     }
 }

@@ -5,7 +5,7 @@ public class ParserException extends Exception {
         super(message);
     }
 
-    public ParserException(String message, Throwable e) {
-        super(message, e);
+    public ParserException() {
+        super("Parser exception");
     }
 }

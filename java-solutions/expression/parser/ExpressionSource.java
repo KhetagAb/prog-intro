@@ -1,7 +1,5 @@
 package expression.parser;
 
-import expression.exceptions.ParserException;
-
 public interface ExpressionSource {
     boolean hasNext();
     char next();
@@ -9,5 +7,5 @@ public interface ExpressionSource {
     boolean hasNext(int forward);
     char getNext(int forward);
 
-    ParserException error(String message);
+    String posExceptionMessage(String message);
 }
