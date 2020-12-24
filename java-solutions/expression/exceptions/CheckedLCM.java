@@ -21,8 +21,8 @@ public class CheckedLCM extends IntegerBinaryOperation {
         return left / MyMath.gcd(left, right) * right;
     }
 
-    public static boolean check(int a, int b) {
-        return a == 0 || b == 0 || CheckedGCD.check(a, b) && CheckedMultiply.check(a / MyMath.gcd(a, b), b);
+    public static boolean check(int left, int right) {
+        return left == 0 || right == 0 || CheckedGCD.check(left, right) && CheckedMultiply.check(left / MyMath.gcd(left, right), right);
     }
 
     @Override

@@ -22,11 +22,11 @@ public class CheckedGCD extends IntegerBinaryOperation {
             left ^= right;
         }
 
-        return left < 0 ? -left : left;
+        return MyMath.abs(left);
     }
 
-    public static boolean check(int a, int b) {
-        return a != Integer.MIN_VALUE || b != Integer.MIN_VALUE;
+    public static boolean check(int left, int right) {
+        return left != Integer.MIN_VALUE || right != Integer.MIN_VALUE;
     }
 
     @Override
