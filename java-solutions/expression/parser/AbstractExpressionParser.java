@@ -95,7 +95,6 @@ public abstract class AbstractExpressionParser extends BaseParser {
         for (Map.Entry<Character, Character> bracket: brackets.entrySet()) {
             if (test(bracket.getKey())) {
                 CommonExpression parsed = parseLevel(0);
-//                skipWhitespace();
                 expect(bracket.getValue());
                 return parsed;
             }
