@@ -176,7 +176,8 @@ public abstract class AbstractExpressionParser extends BaseParser {
     protected ParserException invalidTokenException(Token type, String found) {
         return type.getFactory().apply(getPositionMessage(
                 "Invalid " + type.getExpected() +
-                        " found: " + formatString(found)));
+                        " found: " + formatString(found),
+                (found == null ? 0 : -found.length()) + (ch == EOF ? 0 : -1)));
     }
 
     protected String formatString(final String str) {

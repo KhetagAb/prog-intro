@@ -14,15 +14,7 @@ public class CheckedGCD extends IntegerBinaryOperation {
             throw new ExpressionOverflowException(left + " " + getSymbol() + " " + right);
         }
 
-        while (right != 0) {
-            left %= right;
-
-            left ^= right;
-            right ^= left;
-            left ^= right;
-        }
-
-        return MyMath.abs(left);
+        return MyMath.gcd(left, right);
     }
 
     public static boolean check(int left, int right) {

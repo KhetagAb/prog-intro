@@ -49,7 +49,7 @@ public abstract class BaseParser {
 
     protected void expect(final char expected) throws ParserException {
         if (ch != expected) {
-            throw new MismatchException(getPositionMessage("Expected: " + formatChar(expected) + ", found: " + formatChar(ch)));
+            throw new MismatchException(getPositionMessage("Expected: " + formatChar(expected) + ", found: " + formatChar(ch), ch == EOF ? 0 : -1));
         }
 
         nextChar();
@@ -63,8 +63,8 @@ public abstract class BaseParser {
         return isLetter(ch);
     }
 
-    protected String getPositionMessage(final String message) {
-        return source.posExceptionMessage(message);
+    protected String getPositionMessage(final String message, int delta) {
+        return message + System.lineSeparator() + source.posExceptionMessage(delta);
     }
 
     protected static boolean isDigit(final char ch) {

@@ -7,5 +7,5 @@ public interface ExpressionSource {
     boolean hasNext(int forward);
     char getNext(int forward);
 
-    String posExceptionMessage(String message);
+    String posExceptionMessage(int delta);
 }

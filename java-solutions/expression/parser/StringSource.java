@@ -23,8 +23,12 @@ public class StringSource implements ExpressionSource {
     }
 
     @Override
-    public String posExceptionMessage(String message) {
-        return "Exception from pos " + (pos - 1) + ": " + message;
+    public String posExceptionMessage(int delta) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i <= source.length(); i++) {
+            sb.append(i != pos + delta ? '-' : '^');
+        }
+        return source + System.lineSeparator() + sb.toString();
     }
 
     public char next() {
