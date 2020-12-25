@@ -1,14 +1,14 @@
 package expression.parser;
 
-import expression.*;
-import expression.exceptions.InvalidConstValue;
-import expression.exceptions.InvalidOperatorException;
-import expression.exceptions.InvalidVariableException;
+import expression.CommonExpression;
+import expression.Const;
+import expression.Variable;
 import expression.exceptions.ParserException;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BinaryOperator;
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 public abstract class AbstractExpressionParser extends BaseParser {
@@ -94,7 +94,10 @@ public abstract class AbstractExpressionParser extends BaseParser {
 
         for (Map.Entry<Character, Character> bracket: brackets.entrySet()) {
             if (test(bracket.getKey())) {
-                return parseInBrackets(bracket.getValue());
+                CommonExpression parsed = parseLevel(0);
+//                skipWhitespace();
+                expect(bracket.getValue());
+                return parsed;
             }
         }
 
@@ -106,13 +109,6 @@ public abstract class AbstractExpressionParser extends BaseParser {
         }
 
         return parseValue();
-    }
-
-    protected CommonExpression parseInBrackets(char closeBracket) throws ParserException {
-        CommonExpression parsed = parseLevel(0);
-        skipWhitespace();
-        expect(closeBracket);
-        return parsed;
     }
 
     protected CommonExpression parseConst(final String prefix) throws ParserException {
