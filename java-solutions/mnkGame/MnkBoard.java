@@ -40,11 +40,6 @@ public class MnkBoard implements IBoard, IPosition {
     }
 
     private int countInDirection(Move move, int x, int y) {
-//        for (
-//                int curRow = move.getRow(), curCol = move.getColumn();
-//                getCell(curRow, curCol) == move.getValue();
-//                curRow += x, curCol += y, cnt++
-//        ) { /*empty*/ }
         int curRow = move.getRow(), curCol = move.getColumn();
 
         int cnt = 0;

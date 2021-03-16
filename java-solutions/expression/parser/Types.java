@@ -7,13 +7,13 @@ import expression.exceptions.ParserException;
 
 import java.util.function.Function;
 
-enum Token {
+enum Types {
     VARIABLE("variable", InvalidVariableException::new),
     UNARY("unary operator", InvalidOperatorException::new),
     BINARY("binary operator", InvalidOperatorException::new),
     CONST("constant", InvalidConstValue::new);
 
-    Token(String expected, Function<String, ParserException> factory) {
+    Types(String expected, Function<String, ParserException> factory) {
         this.factory = factory;
         this.expected = expected;
     }
@@ -21,7 +21,7 @@ enum Token {
     private final String expected;
     private final Function<String, ParserException> factory;
 
-    public Function<String, ParserException> getFactory() {
+    public Function<String, ParserException> instanceException() {
         return factory;
     }
 
