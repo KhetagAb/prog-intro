@@ -1,28 +1,23 @@
-# Тесты к курсу «Введение в программирование»
+# Учебные проекты по "Введение в программирование"
+
+[Основная страница курса](http://www.kgeorgiy.info/courses/prog-intro/homeworks.html)
+
+## Памятка
+
+Все решения реализованы на языке программирования Java (версия 11). 
+
+В решениях реализованы сложные модификации (38-39 группы). 
+К каждой задаче предоставлены тесты на корректность исполнения программы.
+
+Мой контакт: https://t.me/abramkht (Хетаг).
+
+## Инструкция по запуску решений:
+
+Описание программы и принципов взаимодействия с пользователем указаны на странице условия домашних заданий. 
+
+Для тестирования программы требуется запустить соответсвующий каждому домашнему заданию исполняющий файл из [тестов](https://github.com/KhetagAb/prog-intro/tree/main/prog-intro-test/java). Для каждого тестового файла указан его usage. Все тесты следует запускать с параметром enable asserts.
 
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/prog-intro/homeworks.html)
-
-## Домашнее задание 13. Markdown to HTML
-
-Модификации
- * *Базовая*
-    * [Исходный код тестов](java/md2html/Md2HtmlTest.java)
-    * [Откомпилированные тесты](artifacts/md2html/Md2HtmlTest.jar)
- * *Mark* (32-35)
-    * Добавьте поддержку `~выделения цветом~`: `<mark>выделения цветом</mark>`
-    * [Исходный код тестов](java/md2html/Md2HtmlMarkTest.java)
-    * [Откомпилированные тесты](artifacts/md2html/Md2HtmlMarkTest.jar)
- * *Image* (36, 37)
-    * Добавьте поддержку ```![картинок](http://www.ifmo.ru/images/menu/small/p10.jpg)```:
-        ```&lt;img alt='картинок' src='http://www.ifmo.ru/images/menu/small/p10.jpg'&gt;```
-    * [Исходный код тестов](java/md2html/Md2HtmlImageTest.java)
-    * [Откомпилированные тесты](artifacts/md2html/Md2HtmlImageTest.jar)
- * *Link* (38, 39)
-    * Добавьте поддержку ```[ссылок с _выделением_](https://kgeorgiy.info)```:
-        ```&lt;a href='https://kgeorgiy.info'>ссылок с &lt;em>выделением&lt;/em>&lt;/a>```
-    * [Исходный код тестов](java/md2html/Md2HtmlLinkTest.java)
-    * [Откомпилированные тесты](artifacts/md2html/Md2HtmlLinkTest.jar)
-
 
 ## Домашнее задание 12. Обработка ошибок
 
@@ -319,59 +314,3 @@
     * Класс должен иметь имя `ReverseAvg`
     * [Исходный код тестов](java/reverse/ReverseAvgTest.java)
     * [Откомпилированные тесты](artifacts/reverse/ReverseAvgTest.jar)
-
-
-## Домашнее задание 2. Сумма чисел
-
-Для того, чтобы протестировать исходную программу:
-
- 1. Скачайте откомпилированные тесты ([SumTest.jar](artifacts/sum/SumTest.jar))
- 1. Откомпилируйте `Sum.java`
- 1. Проверьте, что создался `Sum.class`
- 1. В каталоге, в котором находится `Sum.class` выполните команду
-    ```
-       java -jar <путь к SumTest.jar>
-    ```
-    * Например, если `SumTest.jar` находится в текущем каталоге, выполните команду
-    ```
-        java -jar SumTest.jar
-    ```
-
-Исходный код тестов:
-
-* [SumTest.java](java/sum/SumTest.java)
-* [SumChecker.java](java/sum/SumChecker.java)
-* [Базовые классы](java/base/)
-
-Модификации:
- * *Long* (для 32, 33)
-    * Входные данные являются 64-битными целыми числами
-    * Класс должен иметь имя `SumLong`
-    * [Исходный код тестов](java/sum/SumLongTest.java)
-    * [Откомпилированные тесты](artifacts/sum/SumLongTest.jar)
- * *Float* (для 34, 35)
-    * Входные данные являются 32-битными числами с формате с плавающей точкой
-    * Класс должен иметь имя `SumFloat`
-    * [Исходный код тестов](java/sum/SumFloatTest.java)
-    * [Откомпилированные тесты](artifacts/sum/SumFloatTest.jar)
- * *LongSpace* (для 36, 37)
-    * Входные данные являются 64-битными целыми числами
-    * Класс должен иметь имя `SumLongSpace`
-    * Числа разделяются [пробелами-разделителями](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Character.html#SPACE_SEPARATOR)
-    * [Исходный код тестов](java/sum/SumLongSpaceTest.java)
-    * [Откомпилированные тесты](artifacts/sum/SumLongSpaceTest.jar)
- * *BigIntegerSpace* (для 38, 39)
-    * Входные данные помещаются в тип [BigInteger](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/BigInteger.html)
-    * Класс должен иметь имя `SumBigIntegerSpace`
-    * Числа разделяются [пробелами-разделителями](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Character.html#SPACE_SEPARATOR)
-    * [Исходный код тестов](java/sum/SumBigIntegerSpaceTest.java)
-    * [Откомпилированные тесты](artifacts/sum/SumBigIntegerSpaceTest.jar)
-
-
-
-## Домашнее задание 1. Запусти меня!
-
- 1. Скачайте исходный код ([RunMe.java](java/RunMe.java))
- 1. Откомпилируйте код (должен получиться `RunMe.class`)
- 1. Запустите класс `RunMe` с выданными вам аргументами командной строки
- 1. Следуйте выведенной инструкции
