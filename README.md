@@ -17,7 +17,7 @@
 
 Для тестирования программы требуется запустить соответсвующий каждому домашнему заданию исполняющий файл из [тестов](https://github.com/KhetagAb/prog-intro/tree/main/prog-intro-test/java). Для каждого тестового файла указан его usage. Все тесты следует запускать с параметром enable asserts.
 
-[Условия домашних заданий](http://www.kgeorgiy.info/courses/prog-intro/homeworks.html)
+[Условия домашних заданий](https://github.com/KhetagAb/prog-intro/blob/main/Statements.md)
 
 ## Домашнее задание 12. Обработка ошибок
 
